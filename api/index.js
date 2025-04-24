@@ -106,10 +106,14 @@ app.use("/api/barchart", barChartRouter); // Added bar chart routes
 app.use("/api/linechart", lineChartRouter); // Added line chart routes
 app.use("/api", challengeProgressRouter); // Routes will be available at /api/challengeprogresstracking/*
 app.use("/api", programTrackerRouter); // Routes will be available at /api/programtracktracking/*
-app.use(express.static(path.join(__dirname, "../client/dist")));
+// app.use(express.static(path.join(__dirname, "../client/dist")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+// });
+app.use(express.static(path.join(__dirname, '../employees/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../employees/dist/index.html'));
 });
 
 app.use((err, req, res, next) => {
