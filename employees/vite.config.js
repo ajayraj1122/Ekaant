@@ -5,14 +5,4 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [ tailwindcss(),react()],
   assetsInclude: ["**/*.svg"],
-  build: {
-    rollupOptions: {
-      output: {
-        entryFileNames: `assets/index.js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`
-      }
-    }
-  }
-      
 });
