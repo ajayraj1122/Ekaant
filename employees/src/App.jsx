@@ -110,7 +110,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import Navbar from "./components/layout/Navbar";
-import SignIn from "./components/pages/Signin";
+import Signin from "./components/pages/Signin";
 import SignUp from "./components/pages/SignUp";
 import Home from "./components/pages/Home";
 import Analytics from "./components/pages/Analytics";
@@ -186,7 +186,7 @@ export default function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn setAuthenticated={setAuthenticated} />} />
+        <Route path="/sign-in" element={<Signin setAuthenticated={setAuthenticated} />} />
         <Route path="/sign-up" element={<SignUp />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
