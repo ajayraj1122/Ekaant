@@ -5,4 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [ tailwindcss(),react()],
   assetsInclude: ["**/*.svg"],
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true
+  }
 });
