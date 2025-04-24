@@ -122,16 +122,17 @@ import Challenges from "./components/pages/Challenges";
 import Expert from "./components/pages/Expert";
 import { CreditsProvider } from "./components/context/CreditsContext";
 import PropTypes from 'prop-types';
-import PreventBurnout from "./components/sessions/preventBurnout";
-import ManageStress from "./components/sessions/manageStress"; 
-import CultivateSleep from "./components/sessions/cultivateSleep";
+import PreventBurnout from "./components/sessions/PreventBurnout";
 
-import BuildResilience from "./components/sessions/buildResilience";
-import StressedToBalanced from "./components/sessions/stressedToBalanced";
-import MindfulLeaders from "./components/sessions/mindfulLeaders";
-import MeditationBasics from "./components/sessions/meditationBasics";
-import YogaBasics from "./components/sessions/yogaBasics";
-import HealthyHabits from "./components/sessions/healthyHabits";
+import ManageStress from "./components/sessions/manageStress"; 
+import CultivateSleep from "./components/sessions/CultivateSleep";
+
+import BuildResilience from "./components/sessions/BuildResilience";
+import StressedToBalanced from "./components/sessions/StressedToBalanced";
+import MindfulLeaders from "./components/sessions/MindfulLeaders";
+import MeditationBasics from "./components/sessions/MeditationBasics";
+import YogaBasics from "./components/sessions/YogaBasics";
+import HealthyHabits from "./components/sessions/HealthyHabits";
 import LiveSession from "./components/pages/LiveSession";
 import ForgotPassword from "./components/pages/ForgotPassword"; 
 import ChallengeDetail from "./components/challangecontents/ChallengeDetail";
