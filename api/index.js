@@ -111,9 +111,9 @@ app.use("/api", programTrackerRouter); // Routes will be available at /api/progr
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 // });
-app.use(express.static(path.join(__dirname, '../employees/dist')));
+app.use(express.static(path.join(__dirname, '../employees')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../employees/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../employees/index.html'));
 });
 
 app.use((err, req, res, next) => {
