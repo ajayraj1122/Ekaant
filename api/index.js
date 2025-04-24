@@ -80,6 +80,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
