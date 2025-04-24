@@ -124,7 +124,7 @@ import { CreditsProvider } from "./components/context/CreditsContext";
 import PropTypes from 'prop-types';
 import PreventBurnout from "./components/sessions/PreventBurnout";
 
-import ManageStress from "./components/sessions/manageStress"; 
+import ManageStress from "./components/sessions/ManageStress"; 
 import CultivateSleep from "./components/sessions/CultivateSleep";
 
 import BuildResilience from "./components/sessions/BuildResilience";
