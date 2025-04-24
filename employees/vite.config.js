@@ -7,6 +7,7 @@ export default defineConfig({
   assetsInclude: ["**/*.svg"],
   build: {
     outDir: 'dist',
-    emptyOutDir: true
-  }
+    emptyOutDir: true,
+  },
+  base: './',
 });
