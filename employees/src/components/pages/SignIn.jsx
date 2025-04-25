@@ -185,7 +185,7 @@ const SignIn = () => {
     setError("");
 
     try {
-      const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/sign-in`, formData, {
         withCredentials: true,
       });
 
