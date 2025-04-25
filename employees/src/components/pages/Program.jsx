@@ -178,8 +178,16 @@ const Program = () => {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache'
           },
-          credentials: 'include'
+          credentials: 'include',
+          mode: 'cors'
         });
+
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+          window.location.href = '/sign-in';
+          return;
+        }
 
         if (response.status === 401) {
           localStorage.removeItem('token');
@@ -273,6 +281,23 @@ const Program = () => {
           const token = localStorage.getItem('token') || sessionStorage.getItem('token');
           if (!token) {
             alert('Please login again to continue');
+            window.location.href = '/sign-in';
+            return;
+          }
+
+          // Verify token validity first
+          const verifyResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Cache-Control': 'no-cache'
+            },
+            credentials: 'include'
+          });
+
+          if (!verifyResponse.ok) {
+            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
+            window.location.href = '/sign-in';
             return;
           }
 
