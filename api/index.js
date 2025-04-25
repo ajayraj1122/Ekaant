@@ -171,7 +171,7 @@ let PORT = process.env.PORT || 3000;
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['https://ekaant.onrender.com'],
+  origin: ['https://ekaant.onrender.com','https://ekaant-backend.onrender.com'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
