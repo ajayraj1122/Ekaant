@@ -20,7 +20,6 @@ const SignIn = () => {
   try {
     const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", formData, {
         withCredentials: true,
-        
       });
 
       if (res.data.success) {
