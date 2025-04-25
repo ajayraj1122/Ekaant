@@ -162,7 +162,7 @@
 // // Use setEmployeePrograms in fetchEmployeePrograms
 // const fetchEmployeePrograms = async () => {
 //   try {
-//     const response = await fetch('http://localhost:3000/api/program-progress', {
+//     const response = await fetch('https://ekaant.onrender.com/api/program-progress', {
 //       headers: {
 //         'Authorization': `Bearer ${localStorage.getItem('token')}`
 //       }
@@ -190,7 +190,7 @@
 //         }
 
 //         // First fetch employee profile
-//         const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+//         const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
 //           headers: {
 //             'Authorization': `Bearer ${token}`
 //           }
@@ -204,7 +204,7 @@
 //         const employeeEmail = profileData.employee.email;
 
 //         // Then fetch programs specific to this employee
-//         const programResponse = await fetch(`http://localhost:3000/api/program-progress?email=${employeeEmail}`, {
+//         const programResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${employeeEmail}`, {
 //           headers: {
 //             'Authorization': `Bearer ${token}`
 //           }
@@ -246,7 +246,7 @@
 //         }
 
 //         // First fetch employee profile
-//         const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+//         const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
 //           headers: {
 //             'Authorization': `Bearer ${token}`
 //           }
@@ -260,7 +260,7 @@
 //         console.log("✅ Fetched Employee Data:", profileData);
 
 //         // Then fetch program progress
-//         const progressResponse = await fetch('http://localhost:3000/api/program-progress', {
+//         const progressResponse = await fetch('https://ekaant.onrender.com/api/program-progress', {
 //           headers: {
 //             'Authorization': `Bearer ${token}`
 //           }
@@ -296,7 +296,7 @@
 //           await updateCredits(newCredits, 'set');
 
 //           // Fetch employee data from MongoDB
-//           const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+//           const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
 //             headers: {
 //               'Authorization': `Bearer ${localStorage.getItem('token')}`
 //             }
@@ -314,7 +314,7 @@
 //           }
 
 //           // Initialize/Update program progress
-//           const response = await fetch('http://localhost:3000/api/program-progress/update', {
+//           const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
 //             method: 'POST',
 //             headers: {
 //               'Content-Type': 'application/json',
@@ -348,7 +348,7 @@
           
 //           // Create activity log instead of using localStorage
 //           try {
-//             await fetch('http://localhost:3000/api/activity-log', {
+//             await fetch('https://ekaant.onrender.com/api/activity-log', {
 //               method: 'POST',
 //               headers: {
 //                 'Content-Type': 'application/json',
@@ -842,7 +842,7 @@ const Program = () => {
 // Use setEmployeePrograms in fetchEmployeePrograms
 const fetchEmployeePrograms = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/program-progress', {
+    const response = await fetch('https://ekaant.onrender.com/api/program-progress', {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }
@@ -870,7 +870,7 @@ const fetchEmployeePrograms = async () => {
         }
 
         // First fetch employee profile
-        const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+        const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -884,7 +884,7 @@ const fetchEmployeePrograms = async () => {
         const employeeEmail = profileData.employee.email;
 
         // Then fetch programs specific to this employee
-        const programResponse = await fetch(`http://localhost:3000/api/program-progress?email=${employeeEmail}`, {
+        const programResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${employeeEmail}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -926,7 +926,7 @@ const fetchEmployeePrograms = async () => {
         }
 
         // First fetch employee profile
-        const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+        const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -940,7 +940,7 @@ const fetchEmployeePrograms = async () => {
         console.log("✅ Fetched Employee Data:", profileData);
 
         // Then fetch program progress
-        const progressResponse = await fetch('http://localhost:3000/api/program-progress', {
+        const progressResponse = await fetch('https://ekaant.onrender.com/api/program-progress', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -976,7 +976,7 @@ const fetchEmployeePrograms = async () => {
           await updateCredits(newCredits, 'set');
 
           // Fetch employee data from MongoDB
-          const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+          const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -994,7 +994,7 @@ const fetchEmployeePrograms = async () => {
           }
 
           // Initialize/Update program progress
-          const response = await fetch('http://localhost:3000/api/program-progress/update', {
+          const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1033,7 +1033,7 @@ const fetchEmployeePrograms = async () => {
               throw new Error('No authentication token found');
             }
 
-            const response = await fetch('http://localhost:3000/api/barchart/update', {
+            const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
