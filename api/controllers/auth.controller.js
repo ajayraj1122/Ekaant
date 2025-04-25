@@ -11,14 +11,22 @@ import Session from "../models/Session.model.js";
 
 dotenv.config();
 
-// ✅ Configure Nodemailer (Matches Video's Approach)
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.COMPANY_EMAIL,
-    pass: process.env.COMPANY_EMAIL_PASSWORD,
-  },
-});
+// Configure Nodemailer with retries
+const createTransporter = () => {
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.COMPANY_EMAIL,
+      pass: process.env.COMPANY_EMAIL_PASSWORD,
+    },
+    maxConnections: 5,
+    maxMessages: 10,
+    pool: true,
+    rateDelta: 1000,
+    rateLimit: 5,
+  });
+};
+const transporter = createTransporter();
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -27,7 +35,7 @@ export const signup = async (req, res) => {
   try {
     console.log("Received Signup Request:", req.body);
 
-    const { username, email, phoneNumber, role, employeeId, department } = req.body;  // Added phoneNumber and role
+    const { username, email, phoneNumber, role, employeeId, department } = req.body;
     if (!username || !email) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -41,6 +49,12 @@ export const signup = async (req, res) => {
     const existingEmployee = await Employee.findOne({ email });
     if (existingEmployee) {
       return res.status(400).json({ message: "Employee already exists!" });
+    }
+
+    // Email configuration check
+    if (!process.env.COMPANY_EMAIL || !process.env.COMPANY_EMAIL_PASSWORD) {
+      console.error("Missing email configuration");
+      return res.status(500).json({ message: "Server email configuration error" });
     }
 
     const otp = generateOTP();
@@ -60,23 +74,28 @@ export const signup = async (req, res) => {
 
     await newEmployee.save();
 
-    // ✅ Send OTP Email
-    const mailOptions = {
-      from: process.env.COMPANY_EMAIL,
-      to: email,
-      subject: "Verify Your Email - OTP Code",
-      text: `Your OTP is ${otp}. It is valid for 10 minutes.`,
-    };
+    try {
+      const mailOptions = {
+        from: process.env.COMPANY_EMAIL,
+        to: email,
+        subject: "Verify Your Email - OTP Code",
+        text: `Your OTP is ${otp}. It is valid for 10 minutes.`,
+      };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Email Sending Error:", error);
-        return res.status(500).json({ message: "Failed to send OTP email." });
-      }
-      console.log("OTP Sent Successfully!", info.response);
+      await transporter.sendMail(mailOptions);
+      console.log("✅ OTP Email Sent Successfully to:", email);
       res.status(200).json({ message: "OTP sent to your email. Please verify." });
-    });
+    } catch (emailError) {
+      console.error("❌ Email Sending Error:", emailError);
+      // Delete the employee if email fails
+      await Employee.findOneAndDelete({ email });
+      return res.status(500).json({ 
+        message: "Failed to send OTP email. Please try again.",
+        error: emailError.message 
+      });
+    }
   } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ message: "Server error!", error: error.message });
   }
 };
