@@ -171,20 +171,28 @@ let PORT = process.env.PORT || 3000;
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: 'https://ekaant.onrender.com',
+  origin: ['https://ekaant.onrender.com', 'https://ekaant-backend.onrender.com'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   exposedHeaders: ['Set-Cookie'],
-  preflightContinue: true
+  preflightContinue: false
 }));
 
 // Additional headers for CORS
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com');
+  const origin = req.headers.origin;
+  if (origin === 'https://ekaant.onrender.com' || origin === 'https://ekaant-backend.onrender.com') {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   next();
 });
 
