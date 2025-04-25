@@ -1,86 +1,3 @@
-
-// import { createContext, useState, useContext, useEffect } from "react";
-// import PropTypes from 'prop-types';
-// import axios from 'axios';
-
-// const CreditsContext = createContext();
-
-// export const useCredits = () => {
-//   const context = useContext(CreditsContext);
-//   if (!context) {
-//     throw new Error('useCredits must be used within a CreditsProvider');
-//   }
-//   return context;
-// };
-
-// export const CreditsProvider = ({ children }) => {
-//   const [credits, setCredits] = useState(0);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchCredits = async () => {
-//       try {
-//         const token = localStorage.getItem('token');
-//         if (token) {
-//           const response = await axios.get('http://localhost:3000/api/profile', {
-//             headers: { Authorization: `Bearer ${token}` }
-//           });
-//           if (response.data && response.data.employee) {
-//             setCredits(response.data.employee.credits || 0);
-//           }
-//         }
-//       } catch (error) {
-//         console.error('Error fetching credits:', error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchCredits();
-//   }, []);
-
-//   const updateCredits = async (newAmount, operation = 'set') => {
-//     try {
-//       const token = localStorage.getItem('token');
-//       if (!token) {
-//         throw new Error('No authentication token found');
-//       }
-
-//       const response = await axios.post(
-//         'http://localhost:3000/api/update-credits',
-//         { credits: newAmount, operation },
-//         { headers: { Authorization: `Bearer ${token}` }}
-//       );
-
-//       if (response.data && response.data.success) {
-//         setCredits(response.data.credits);
-//         return response.data.credits;
-//       }
-
-//       throw new Error(response.data?.message || 'Failed to update credits');
-//     } catch (error) {
-//       console.error('Credits update error:', error);
-//       throw error;
-//     }
-//   };
-
-//   const value = {
-//     credits,
-//     updateCredits,
-//     loading
-//   };
-
-//   return (
-//     <CreditsContext.Provider value={value}>
-//       {children}
-//     </CreditsContext.Provider>
-//   );
-// };
-
-// CreditsProvider.propTypes = {
-//   children: PropTypes.node.isRequired,
-// };
-
 import { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -107,7 +24,7 @@ export const CreditsProvider = ({ children }) => {
         return;
       }
 
-      const response = await axios.get('http://localhost:3000/api/profile', {
+      const response = await axios.get('https://ekaant.onrender.com/api/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -139,7 +56,7 @@ export const CreditsProvider = ({ children }) => {
       if (!token) throw new Error('No authentication token found');
 
       const response = await axios.post(
-        'http://localhost:3000/api/update-credits',
+        'https://ekaant.onrender.com/api/update-credits',
         { credits: newAmount, operation },
         { headers: { Authorization: `Bearer ${token}` }}
       );

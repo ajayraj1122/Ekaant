@@ -104,7 +104,7 @@ const ProfileModal = ({ open, onClose, profileData, setProfileData }) => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/api/employee/upload-avatar",
+        "https://ekaant.onrender.com/api/employee/upload-avatar",
         formData,
         config
       );
@@ -159,7 +159,7 @@ const ProfileModal = ({ open, onClose, profileData, setProfileData }) => {
       console.log("Sending update with data:", updateData);
 
       const response = await axios.put(
-        `http://localhost:3000/api/employee/update/${profileData._id}`,
+        `https://ekaant.onrender.com/api/employee/update/${profileData._id}`,
         updateData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

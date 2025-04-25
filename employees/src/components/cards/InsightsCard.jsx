@@ -16,7 +16,7 @@ const InsightsCard = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const response = await fetch("http://localhost:3000/api/insights/last-submission", {
+        const response = await fetch("https://ekaant.onrender.com/api/insights/last-submission", {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -131,7 +131,7 @@ const InsightsCard = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/api/insights/submit", {
+      const response = await fetch("https://ekaant.onrender.com/api/insights/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

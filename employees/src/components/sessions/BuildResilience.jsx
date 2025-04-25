@@ -12,7 +12,7 @@ const useProgress = (programType) => {
   const fetchProgress = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/programtracker?programType=${programType}`, {
+      const response = await fetch(`https://ekaant.onrender.com/api/programtracker?programType=${programType}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -31,7 +31,7 @@ const useProgress = (programType) => {
   const updateProgress = async (dayIndex, activityIndex, completed) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/programtracker/update', {
+      const response = await fetch('https://ekaant.onrender.com/api/programtracker/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const useProgress = (programType) => {
   const unlockLevel = async (level) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/programtracker/unlocklevel', {
+      const response = await fetch('https://ekaant.onrender.com/api/programtracker/unlocklevel', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ const BuildResilience = () => {
     const fetchProgress = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/programtracker?programType=buildResilience', {
+        const response = await fetch('https://ekaant.onrender.com/api/programtracker?programType=buildResilience', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -188,7 +188,7 @@ const BuildResilience = () => {
     const updateProgress = async () => {
       try {
         const token = localStorage.getItem('token');
-        await fetch('http://localhost:3000/api/programtracker/update', {
+        await fetch('https://ekaant.onrender.com/api/programtracker/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

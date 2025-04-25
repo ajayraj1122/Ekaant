@@ -15,7 +15,7 @@
 //       if (category === 'program' && programType) {
 //         // Update program progress in MongoDB
 //         const token = localStorage.getItem('token');
-//         await fetch('http://localhost:3000/api/programtracker/update', {
+//         await fetch('/api/programtracker/update', {
 //           method: 'POST',
 //           headers: {
 //             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@
 //   try {
 //     // Use MongoDB for challenges category
 //     if (category === 'challenges') {
-//       await fetch('http://localhost:3000/api/linechart/update/challenges', {
+//       await fetch('/api/linechart/update/challenges', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@
 //         })
 //       });
 //     } else {
-//       await fetch('http://localhost:3000/api/linechart/update', {
+//       await fetch('/api/linechart/update', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@
 //     let durationMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
 //     if (durationMinutes < 0) durationMinutes += 24 * 60;
 
-//     await fetch('http://localhost:3000/api/linechart/update', {
+//     await fetch('/api/linechart/update', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
@@ -173,7 +173,7 @@
 //       try {
 //         const token = localStorage.getItem('token');
 //         setViewData([]); // Clear existing data before fetch
-//         const response = await fetch('http://localhost:3000/api/linechart', {
+//         const response = await fetch('/api/linechart', {
 //           headers: {
 //             'Authorization': `Bearer ${token}`
 //           }
@@ -271,7 +271,7 @@ export const startVideoTimeTracking = (category, videoElement, programType = nul
       if (category === 'program' && programType) {
         // Update program progress in MongoDB
         const token = localStorage.getItem('token');
-        await fetch('http://localhost:3000/api/programtracker/update', {
+        await fetch('/api/programtracker/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ export const updateWatchTimeStatisticsSimple = async (category) => {
   try {
     // Use MongoDB for challenges category
     if (category === 'challenges') {
-      await fetch('http://localhost:3000/api/linechart/update/challenges', {
+      await fetch('https://ekaant.onrender.com/api/linechart/update/challenges', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -332,7 +332,7 @@ export const updateWatchTimeStatisticsSimple = async (category) => {
         })
       });
     } else {
-      await fetch('http://localhost:3000/api/linechart/update', {
+      await fetch('https://ekaant.onrender.com/api/linechart/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -365,7 +365,7 @@ export const updateWatchTimeStatisticsDuration = async (category, startTime, end
     let durationMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     if (durationMinutes < 0) durationMinutes += 24 * 60;
 
-    await fetch('http://localhost:3000/api/linechart/update', {
+    await fetch('https://ekaant.onrender.com/api/linechart/update', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -430,7 +430,7 @@ const CustomLineChart = () => {
       try {
         const token = localStorage.getItem('token');
         setViewData([]); // Clear existing data before fetch
-        const response = await fetch('http://localhost:3000/api/linechart', {
+        const response = await fetch('/api/linechart', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

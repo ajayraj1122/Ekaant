@@ -12,7 +12,7 @@ const ProfileCard = () => {
       if (!token) return;
 
       const response = await axios.get(
-        "http://localhost:3000/api/employee/profile",
+        "https://ekaant.onrender.com/api/employee/profile",
         {
           headers: { Authorization: `Bearer ${token}` }
         }
@@ -40,7 +40,7 @@ const ProfileCard = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.post(
-          "http://localhost:3000/api/employee/upload-avatar",
+          "https://ekaant.onrender.com/api/employee/upload-avatar",
           formData,
           { 
             headers: { 

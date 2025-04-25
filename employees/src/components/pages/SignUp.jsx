@@ -28,7 +28,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:3000/api/sign-up", formData);
+      await axios.post("https://ekaant.onrender.com/api/sign-up", formData);
       alert("OTP sent to your email!");
       setStep(2);
     } catch (err) {
@@ -42,7 +42,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:3000/api/verify-otp", {
+      await axios.post("https://ekaant.onrender.com/api/verify-otp", {
         email: formData.email,
         otp: formData.otp,
       });
@@ -63,7 +63,7 @@ const Signup = () => {
     }
     setLoading(true);
     try {
-      await axios.post("http://localhost:3000/api/set-password", {
+      await axios.post("https://ekaant.onrender.com/api/set-password", {
         email: formData.email,
         password: formData.password,
       });

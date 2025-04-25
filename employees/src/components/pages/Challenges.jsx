@@ -63,7 +63,7 @@
 //         if (!token) return;
 
 //         // Fetch employee profile for credits
-//         const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+//         const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
 //           headers: { 'Authorization': `Bearer ${token}` }
 //         });
 
@@ -73,7 +73,7 @@
 //         }
 
 //         // Fetch joined challenges
-//         const challengesResponse = await fetch('http://localhost:3000/api/challenges', {
+//         const challengesResponse = await fetch('https://ekaant.onrender.com/api/challenges', {
 //           headers: { 'Authorization': `Bearer ${token}` }
 //         });
 
@@ -100,7 +100,7 @@
 //       const token = localStorage.getItem('token');
 //       const challenge = challenges.find(c => c.id === challengeId);
 
-//       const response = await fetch('http://localhost:3000/api/challenges/join', {
+//       const response = await fetch('https://ekaant.onrender.com/api/challenges/join', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -378,7 +378,7 @@
 //         if (!token) return;
 
 //         // Fetch employee profile for credits
-//         const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+//         const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
 //           headers: { 'Authorization': `Bearer ${token}` }
 //         });
 
@@ -388,7 +388,7 @@
 //         }
 
 //         // Fetch joined challenges
-//         const challengesResponse = await fetch('http://localhost:3000/api/challenges', {
+//         const challengesResponse = await fetch('https://ekaant.onrender.com/api/challenges', {
 //           headers: { 'Authorization': `Bearer ${token}` }
 //         });
 
@@ -415,7 +415,7 @@
 //       const token = localStorage.getItem('token');
 //       const challenge = challenges.find(c => c.id === challengeId);
 
-//       const response = await fetch('http://localhost:3000/api/challenges/join', {
+//       const response = await fetch('https://ekaant.onrender.com/api/challenges/join', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -698,7 +698,7 @@ const Challenge = () => {
         if (!token) return;
 
         // Fetch employee profile for credits
-        const profileResponse = await fetch('http://localhost:3000/api/employee/profile', {
+        const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -708,7 +708,7 @@ const Challenge = () => {
         }
 
         // Fetch joined challenges
-        const challengesResponse = await fetch('http://localhost:3000/api/challenges', {
+        const challengesResponse = await fetch('https://ekaant.onrender.com/api/challenges', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -735,7 +735,7 @@ const Challenge = () => {
       const token = localStorage.getItem('token');
       const challenge = challenges.find(c => c.id === challengeId);
 
-      const response = await fetch('http://localhost:3000/api/challenges/join', {
+      const response = await fetch('https://ekaant.onrender.com/api/challenges/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -771,7 +771,7 @@ const Challenge = () => {
             throw new Error('No authentication token found');
           }
 
-          const response = await fetch('http://localhost:3000/api/barchart/update', {
+          const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

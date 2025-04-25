@@ -79,7 +79,7 @@
 //         }
 
 //         setIsLoading(true);
-//         const response = await axios.get("http://localhost:3000/api/employee/profile", {
+//         const response = await axios.get("https://ekaant.onrender.com/api/employee/profile", {
 //           headers: { 
 //             Authorization: `Bearer ${token}`,
 //             'Content-Type': 'application/json'
@@ -1574,7 +1574,7 @@ const LiveSession = () => {
         }
 
         setIsLoading(true);
-        const response = await axios.get("http://localhost:3000/api/employee/profile", {
+        const response = await axios.get("https://ekaant.onrender.com/api/employee/profile", {
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -1589,7 +1589,7 @@ const LiveSession = () => {
         setEmployeeEmail(response.data.employee.email);
 
         const sessionsResponse = await axios.get(
-          `http://localhost:3000/api/live-sessions/${response.data.employee.email}`,
+          `https://ekaant.onrender.com/api/live-sessions/${response.data.employee.email}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1885,7 +1885,7 @@ const LiveSession = () => {
 
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3000/api/live-sessions/book",
+        "https://ekaant.onrender.com/api/live-sessions/book",
         {
           employeeEmail,
           expertEmail: selectedSession.expert.mail,
@@ -1922,7 +1922,7 @@ const LiveSession = () => {
             throw new Error('No authentication token found');
           }
 
-          const response = await fetch('http://localhost:3000/api/barchart/update', {
+          const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1955,7 +1955,7 @@ const LiveSession = () => {
         // Update MongoDB LineChart
         try {
           const token = localStorage.getItem("token");
-          await fetch('http://localhost:3000/api/linechart/update', {
+          await fetch('https://ekaant.onrender.com/api/linechart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1988,7 +1988,7 @@ const LiveSession = () => {
           };
 
           const notificationResponse = await axios.post(
-            "http://localhost:3000/api/notifications",
+            "https://ekaant.onrender.com/api/notifications",
             notificationData,
             {
               headers: {
@@ -2146,7 +2146,7 @@ const LiveSession = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:3000/api/live-sessions/${employeeEmail}/cancel/${sessionId}`,
+        `https://ekaant.onrender.com/api/live-sessions/${employeeEmail}/cancel/${sessionId}`,
         { 
           expertEmail: booking.expertEmail,
           expertName: booking.expertName,
@@ -2179,7 +2179,7 @@ const LiveSession = () => {
                 throw new Error('No authentication token found');
               }
 
-              const response = await fetch('http://localhost:3000/api/barchart/update', {
+              const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -2212,7 +2212,7 @@ const LiveSession = () => {
 
             try {
               const token = localStorage.getItem("token");
-              await fetch('http://localhost:3000/api/linechart/update', {
+              await fetch('https://ekaant.onrender.com/api/linechart/update', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -2244,7 +2244,7 @@ const LiveSession = () => {
               };
 
               const notificationResponse = await axios.post(
-                "http://localhost:3000/api/notifications",
+                "https://ekaant.onrender.com/api/notifications",
                 notificationData,
                 {
                   headers: {
@@ -2406,7 +2406,7 @@ const LiveSession = () => {
 
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3000/api/live-sessions/book",
+        "https://ekaant.onrender.com/api/live-sessions/book",
         {
           employeeEmail,
           expertEmail: selectedSession.expert.mail,
@@ -2438,7 +2438,7 @@ const LiveSession = () => {
             throw new Error('No authentication token found');
           }
 
-          const response = await fetch('http://localhost:3000/api/barchart/update', {
+          const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -2471,7 +2471,7 @@ const LiveSession = () => {
         // Update MongoDB LineChart
         try {
           const token = localStorage.getItem("token");
-          await fetch('http://localhost:3000/api/linechart/update', {
+          await fetch('https://ekaant.onrender.com/api/linechart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -2504,7 +2504,7 @@ const LiveSession = () => {
           };
 
           const notificationResponse = await axios.post(
-            "http://localhost:3000/api/notifications",
+            "https://ekaant.onrender.com/api/notifications",
             notificationData,
             {
               headers: {
