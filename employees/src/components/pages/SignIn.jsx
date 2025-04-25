@@ -191,25 +191,45 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+
     try {
-      const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", formData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
+      const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", 
+        {
+          email: formData.email.trim(),
+          password: formData.password
+        },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
         }
-      });
+      );
 
       if (res.data.success) {
         const { employee, token } = res.data;
         localStorage.setItem("user", JSON.stringify(employee));
         localStorage.setItem("token", token);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        await refreshCredits();
-        window.dispatchEvent(new Event('chartDataUpdated'));
-        navigate("/analytics");
+        
+        try {
+          await refreshCredits();
+          window.dispatchEvent(new Event('chartDataUpdated'));
+          navigate("/analytics");
+        } catch (refreshError) {
+          console.error("Error refreshing credits:", refreshError);
+          // Continue with navigation even if credits refresh fails
+          navigate("/analytics");
+        }
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Sign-in failed! Please try again.");
+      console.error("Sign-in error:", err);
+      setError(
+        err.response?.data?.message || 
+        "Unable to sign in. Please check your credentials and try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -297,6 +317,7 @@ const SignIn = () => {
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                   required
+                  autoComplete="email"
                 />
               </div>
               <div>
@@ -309,6 +330,7 @@ const SignIn = () => {
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                   required
+                  autoComplete="current-password"
                 />
                 <div className="flex justify-end mt-2">
                   <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
@@ -318,7 +340,7 @@ const SignIn = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200"
+                className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={loading}
               >
                 {loading ? "Signing in..." : "Sign In"}
