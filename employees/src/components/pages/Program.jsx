@@ -166,6 +166,7 @@ const Program = () => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         if (!token) {
           console.error('No token found. User needs to login');
+          window.location.href = '/sign-in';
           return;
         }
 
@@ -177,9 +178,15 @@ const Program = () => {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache'
           },
-          credentials: 'include',
-          mode: 'cors'
+          credentials: 'include'
         });
+
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+          window.location.href = '/sign-in';
+          return;
+        }
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
