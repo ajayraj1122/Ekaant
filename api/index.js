@@ -171,12 +171,22 @@ let PORT = process.env.PORT || 3000;
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['https://ekaant.onrender.com','https://ekaant-backend.onrender.com'],
+  origin: 'https://ekaant.onrender.com',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['set-cookie']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
+  preflightContinue: true
 }));
+
+// Additional headers for CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
 
 // Enhanced cookie settings
 app.use(cookieParser());
