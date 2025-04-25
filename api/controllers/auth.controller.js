@@ -136,14 +136,23 @@ export const signin = async (req, res) => {
     const token = jwt.sign({ id: employee._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
     // ✅ Store the token in frontend after login
-    res.status(200)
-    .header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com')
-    .header('Access-Control-Allow-Credentials', 'true')
-    .json({ success: true, token, employee });
+    // Set secure cookie and CORS headers
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com');
+
+    res.status(200).json({ success: true, token, employee });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ message: "Server error!", error: error.message });
   }
 };
+
 
 // ✅ Fetch Profile (protected route using token)
 export const fetchProfile = async (req, res) => {
