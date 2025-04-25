@@ -157,7 +157,6 @@ import barChartRouter from "./routes/barChart.route.js";
 import lineChartRouter from "./routes/lineChart.route.js";
 import challengeProgressRouter from "./routes/challengeProgress.route.js";
 import programTrackerRouter from "./routes/programTracker.route.js";
-
 dotenv.config();
 
 mongoose
@@ -170,47 +169,38 @@ const __dirname = path.resolve();
 let PORT = process.env.PORT || 3000;
 
 // Enhanced CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'http://localhost:3000', 
+  'http://0.0.0.0:3000', 
+  'https://ekaant.onrender.com',
+  'https://ekaant-backend.onrender.com'
+];
+
 app.use(cors({
-  origin: function(origin, callback) {
-    const allowedOrigins = ['https://ekaant.onrender.com', 'https://ekaant-backend.onrender.com', 'http://localhost:3000', 'http://localhost:5000'];
-    callback(null, allowedOrigins.includes(origin) ? origin : false);
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('render.com')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  exposedHeaders: ['Set-Cookie']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
+  exposedHeaders: ['Content-Length', 'Set-Cookie'],
+  optionsSuccessStatus: 200
 }));
 
-// Additional headers for CORS
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin === 'https://ekaant.onrender.com' || origin === 'https://ekaant-backend.onrender.com') {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  next();
-});
-
-// Enhanced cookie settings
-app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.COOKIE_SECRET || 'your-secret-key'));
 
-// Set secure cookie options
+// Cookie settings middleware
 app.use((req, res, next) => {
-  res.cookie('options', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    domain: '.onrender.com'
-  });
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 
@@ -220,15 +210,15 @@ if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
 }
 
-// Request logging middleware (from original, slightly adjusted)
+// Request logging middleware
 app.use((req, res, next) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);
   console.log("Request Headers:", req.headers);
-
+  
   if (req.headers['content-type']?.includes('multipart/form-data')) {
     return next();
   }
-
+  
   if (req.method === "POST" && req.headers['content-type']?.includes('application/json')) {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ success: false, message: "Request body is empty. Please send valid JSON data." });
@@ -237,8 +227,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// Routes (from original)
+// Routes
 app.use("/api/employee", employeeRouter);
 app.use("/api", authRouter);
 app.use("/api/activity", activityLogRouter);
@@ -254,13 +243,13 @@ app.use("/api/linechart", lineChartRouter);
 app.use("/api", challengeProgressRouter);
 app.use("/api", programTrackerRouter);
 
-// Static files for frontend (from original)
+// Static files for frontend
 app.use(express.static(path.join(__dirname, '/employees/dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'employees', 'dist', 'index.html'));
 });
 
-// Error handlers (from original)
+// Error handlers
 app.use((err, req, res, next) => {
   console.error("Error occurred:", err);
   res.status(err.status || 500).json({
@@ -276,7 +265,7 @@ const server = app.listen(PORT, () => {
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
     PORT++;
-    console.log(`Port ${PORT - 1} is in use, trying port ${PORT}...`);
+    console.log(`Port 3000 is in use, trying port ${PORT}...`);
     server.listen(PORT);
   } else {
     console.error("Server error:", err);
