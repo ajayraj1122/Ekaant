@@ -33,10 +33,11 @@ let PORT = process.env.PORT || 3000;
 
 // Configure CORS before other middleware
 app.use(cors({
-  origin: 'https://ekaant.onrender.com',
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://0.0.0.0:3000', 'https://ekaant.onrender.com', 'https://ekaant-backend.onrender.com'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
+  exposedHeaders: ['Content-Length']
 }));
 
 app.use(express.json());
@@ -61,6 +62,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Configure CORS before other middleware
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://0.0.0.0:3000', 'https://ekaant.onrender.com', 'https://ekaant-backend.onrender.com'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Access-Control-Allow-Origin'],
+  exposedHeaders: ['Content-Length']
+}));
 
 // Global error handler
 app.use((err, req, res, next) => {

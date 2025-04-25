@@ -14,12 +14,11 @@
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
 //   };
 
-//   const handleSubmit = async (e) => {
+//   async function handleSubmit(e) {
 //     e.preventDefault();
-//     setError("");
-
+//     const formData = new FormData(e.target);
 //     try {
-//       const res = await axios.post("http://localhost:3000/api/sign-in", formData, {
+//       const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", formData, {
 //         withCredentials: true,
 //       });
 
@@ -31,7 +30,13 @@
 
 //         // Refresh credits from the context
 //         await refreshCredits();
-        
+
+//         // Trigger bar chart data update before navigation
+//         window.dispatchEvent(new Event('chartDataUpdated'));
+
+//         // Small delay to ensure data is fetched before navigation
+//         //await new Promise(resolve => setTimeout(resolve, 100));
+
 //         navigate("/analytics");
 //       }
 //     } catch (err) {
@@ -165,6 +170,7 @@
 // };
 
 // export default SignIn;
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -173,45 +179,39 @@ import { useCredits } from "../context/CreditsContext";
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { refreshCredits } = useCredits();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setLoading(true);
     try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://ekaant.onrender.com';
-      const res = await axios.post(`${baseURL}/api/sign-in`, formData, {
+      const res = await axios.post("https://ekaant-backend.onrender.com/api/sign-in", formData, {
         withCredentials: true,
-  
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    });
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
       if (res.data.success) {
         const { employee, token } = res.data;
         localStorage.setItem("user", JSON.stringify(employee));
         localStorage.setItem("token", token);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        // Refresh credits from the context
         await refreshCredits();
-
-        // Trigger bar chart data update before navigation
         window.dispatchEvent(new Event('chartDataUpdated'));
-
-        // Small delay to ensure data is fetched before navigation
-        //await new Promise(resolve => setTimeout(resolve, 100));
-
         navigate("/analytics");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Sign-in failed! Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -232,24 +232,24 @@ const SignIn = () => {
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-purple-100/40 to-indigo-100/40 rounded-tr-full blur-3xl -z-10" />
       <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px]" />
 
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 backdrop-blur-sm p-6 rounded-xl">
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 backdrop-blur-sm p-6 rounded-xl">
         <div className="order-2 lg:order-1 animate-fade-in">
           <div className="space-y-6 max-w-lg mx-auto lg:mx-0 backdrop-blur-sm p-6 rounded-xl">
             <div className="flex items-center mb-8 floating">
               <img src="/logo-03.png" alt="Ekaant" className="h-24 w-auto rounded-full shadow-xl transform transition-all duration-500 hover:rotate-12" />
             </div>
 
-            <h2 
-              className="text-[25px] text-[#333333] font-bold mb-12 text-center lg:text-left leading-tight"
-              style={{ fontFamily: 'Poppins, sans-serif' }}
-            >
+            <h2 className="text-[25px] text-[#333333] font-bold mb-12 text-center lg:text-left leading-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>
               Your Mental Health
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                 Matters to Us
               </span>
             </h2>
 
-            <h2 className="text-[40px] text-[#333333] font-semibold mb-12 justify-center flex items-center" style={{ fontFamily: 'Poppins, sans-serif' }}>We take your privacy seriously</h2>
+            <h2 className="text-[40px] text-[#333333] font-semibold mb-12 justify-center flex items-center" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              We take your privacy seriously
+            </h2>
+
             <div className="space-y-12">
               <div className="flex items-start space-x-6">
                 <div className="bg-blue-100 p-4 rounded-full justify-center flex items-center">
@@ -292,6 +292,7 @@ const SignIn = () => {
                 <input
                   type="email"
                   name="email"
+                  value={formData.email}
                   placeholder="name@example.com"
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
@@ -303,6 +304,7 @@ const SignIn = () => {
                 <input
                   type="password"
                   name="password"
+                  value={formData.password}
                   placeholder="••••••••"
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
@@ -317,8 +319,9 @@ const SignIn = () => {
               <button
                 type="submit"
                 className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200"
+                disabled={loading}
               >
-                Sign In
+                {loading ? "Signing in..." : "Sign In"}
               </button>
               <div className="text-center mt-4">
                 <p className="text-sm text-gray-600">
