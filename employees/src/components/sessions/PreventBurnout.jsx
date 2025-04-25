@@ -237,7 +237,7 @@ const PreventBurnout = () => {
       {
         level: 1,
         name: "Mindfulness",
-        video: "/videos/7 Minute Guided Meditation for Focus [Hindi]. Hum Jeetenge Meditation(480P).mp4",
+        video: encodeURIComponent("/videos/7 Minute Guided Meditation for Focus [Hindi]. Hum Jeetenge Meditation(480P).mp4"),
         duration: 8,
       },
       {
