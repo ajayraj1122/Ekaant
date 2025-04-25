@@ -345,8 +345,12 @@ const Program = () => {
             })
           });
 
-          if (!response.ok) {
-            throw new Error('Failed to update progress');
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            // Refund credits if program join failed
+            await updateCredits(100, 'add');
+            throw new Error(data.message || 'Failed to join program');
           }
 
           setAttendEnabled(prev => ({
@@ -355,7 +359,7 @@ const Program = () => {
           }));
 
           const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
-          
+
           try {
             const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',
