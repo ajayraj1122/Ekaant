@@ -116,11 +116,26 @@ export const setPassword = async (req, res) => {
     employee.password = hashedPassword;
     await employee.save();
 
-    res.status(200).json({ message: "Password set successfully!" });
+    // Generate token after password is set
+    const token = jwt.sign({ id: employee._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    // Set secure cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com');
+
+    res.status(200).json({ success: true, message: "Password set successfully!", token, employee });
   } catch (error) {
-    res.status(500).json({ message: "Server error!", error: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
+
 
 // ✅ Employee Sign-In (Login)
 export const signin = async (req, res) => {
