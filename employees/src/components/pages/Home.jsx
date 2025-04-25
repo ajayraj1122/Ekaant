@@ -33,7 +33,7 @@ const Home = () => {
         <div className="order-2 lg:order-1 animate-fade-in">
           <div className="space-y-6 max-w-lg mx-auto lg:mx-0 backdrop-blur-sm p-6 rounded-xl">
             <div className="flex items-center mb-8">
-              <img src="\logo-03.png" alt="Ekaant" className="h-20 w-50 rounded-full" />
+              <img src="\logo-03.png" alt="Ekaant" className="h-12 w-12 rounded-full" />EKAANT
 
             </div>
 

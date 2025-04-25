@@ -28,7 +28,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://ekaant-backend.onrender.com/api/sign-up", formData);
+      await axios.post("http://localhost:3000/api/sign-up", formData);
       alert("OTP sent to your email!");
       setStep(2);
     } catch (err) {
@@ -42,7 +42,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://ekaant-backend.onrender.com/api/verify-otp", {
+      await axios.post("http://localhost:3000/api/verify-otp", {
         email: formData.email,
         otp: formData.otp,
       });
@@ -63,7 +63,7 @@ const Signup = () => {
     }
     setLoading(true);
     try {
-      await axios.post("https://ekaant-backend.onrender.com/api/set-password", {
+      await axios.post("http://localhost:3000/api/set-password", {
         email: formData.email,
         password: formData.password,
       });
@@ -98,7 +98,7 @@ const Signup = () => {
           <div className="space-y-6 max-w-lg mx-auto lg:mx-0 backdrop-blur-sm p-6 rounded-xl">
            
           <div className="flex items-center mb-8 floating">
-              <img src="/logo-03.png" alt="Ekaant" className="h-24 w-auto rounded-full shadow-xl transform transition-all duration-500 hover:rotate-12" />
+              <img src="/logo-03.png" alt="Ekaant" className="h-12 w-12 transform transition-all duration-500 hover:rotate-12" />EKAANT
             </div>
 
             <h2 

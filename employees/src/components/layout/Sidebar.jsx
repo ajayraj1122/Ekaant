@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Users as Team, MedalIcon, TrophyIcon, SheetIcon, CircleDashed, BarChart4Icon, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,20 +46,21 @@ const Sidebar = () => {
   };
 
   return (
-    <motion.div 
-      className="h-screen-full w-80 text-white flex flex-col shadow-xl p-4 relative overflow-hidden bg-gradient animate-gradient"
-      transition={{
-        duration: 3,
-        ease: "easeInOut",
-        repeat: Infinity,
-      }}
-    >
+    <>
+      <motion.div 
+        className="h-screen-full w-80 text-white flex flex-col shadow-xl p-4 relative overflow-hidden bg-gradient animate-gradient"
+        transition={{
+          duration: 3,
+          ease: "easeInOut",
+          repeat: Infinity,
+        }}
+      >
       <style>{`
         .bg-gradient {
           background: linear-gradient(
             45deg,
-rgb(23, 5, 82),
-rgb(47, 6, 91),
+            #FF1493,
+            #C71585,
             #800080,
             #8B008B,
             #9400D3,
@@ -135,8 +135,9 @@ rgb(47, 6, 91),
         />
       ))}
 
-      <div className="mb-6 text-center py-4">
-        <img src="\logo-03.png" alt="EKAANT" className="h-20 mx-auto"/>
+           <div className="flex items-center justify-center gap-2 mb-6 py-4">
+        <img src="\logo-03.png" alt="Ekaant Logo" className="h-12 w-12" />
+        <div className="text-3xl text-white">EKAANT</div>
       </div>
       <div className="flex-2 bg-black/30 backdrop-blur-sm p-4 rounded-tr-[40px] rounded-tl-[40px] mt-6 py-4 px-4">
         <nav>
@@ -167,9 +168,13 @@ rgb(47, 6, 91),
           <span className="ml-5 font-medium">Logout</span>
         </button>
       </div>
-
-      {showLogoutPopup && <LogOutPopup onClose={() => setShowLogoutPopup(false)} onConfirm={handleLogout} />}
-    </motion.div>
+      </motion.div>
+      {showLogoutPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <LogOutPopup onClose={() => setShowLogoutPopup(false)} onConfirm={handleLogout} />
+        </div>
+      )}
+    </>
   );
 };
 
