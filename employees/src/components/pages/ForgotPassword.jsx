@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/send-otp-reset", { email }, { withCredentials: true });
+      const res = await axios.post("https://ekaant-backend.onrender.com/api/send-otp-reset", { email }, { withCredentials: true });
       setMessage(res.data.message);
       setStep(2);
     } catch (err) {
@@ -43,7 +43,7 @@ const ForgotPassword = () => {
     }
   
     try {
-      const res = await axios.post("http://localhost:3000/api/verify-otp-reset", { email, otp }, { withCredentials: true });
+      const res = await axios.post("https://ekaant-backend.onrender.com/api/verify-otp-reset", { email, otp }, { withCredentials: true });
       setMessage(res.data.message);
       setStep(3);
     } catch (err) {
@@ -62,7 +62,7 @@ const ForgotPassword = () => {
     }
   
     try {
-      const res = await axios.post("http://localhost:3000/api/reset-password", { email, newPassword }, { withCredentials: true });
+      const res = await axios.post("https://ekaant-backend.onrender.com/api/reset-password", { email, newPassword }, { withCredentials: true });
       setMessage(res.data.message);
       navigate("/sign-in");
     } catch (err) {
