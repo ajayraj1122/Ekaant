@@ -54,7 +54,6 @@
 //     res.status(500).json({ success: false, message: error.message });
 //   }
 // };
-
 import ProgramProgress from '../models/ProgramProgress.model.js';
 
 export const updateProgress = async (req, res) => {
@@ -62,11 +61,19 @@ export const updateProgress = async (req, res) => {
     const { programId, programName, expertName, currentLevel, completedLevel, levelName, employeeEmail } = req.body;
     const employeeId = req.employee.id;
 
-    // Check if program progress exists
-    let progress = await ProgramProgress.findOne({ 
-      employeeId,
-      programId,
-      employeeEmail 
+    if (!programId || !employeeEmail) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Program ID and employee email are required' 
+      });
+    }
+
+    // Check if program progress exists using either employeeId or email
+    let progress = await ProgramProgress.findOne({
+      $or: [
+        { employeeId, programId },
+        { employeeEmail, programId }
+      ]
     });
 
     if (!progress) {
@@ -113,14 +120,29 @@ export const getProgress = async (req, res) => {
     const employeeId = req.employee.id;
     const employeeEmail = req.query.email;
 
-    const query = { employeeId };
-    if (employeeEmail) {
-      query.employeeEmail = employeeEmail;
+    if (!employeeId && !employeeEmail) {
+      return res.status(400).json({
+        success: false,
+        message: 'Either employee ID or email is required'
+      });
     }
 
+    const query = {
+      $or: [
+        { employeeId },
+        { employeeEmail }
+      ]
+    };
+
     const progress = await ProgramProgress.find(query);
+
+    if (!progress || progress.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No program progress found'
+      });
+    }
     console.log("✅ Fetched program progress for:", employeeEmail || employeeId);
-    
     res.status(200).json({ success: true, progress });
   } catch (error) {
     console.error("❌ Error fetching progress:", error);

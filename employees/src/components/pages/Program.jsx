@@ -165,7 +165,7 @@ const Program = () => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         if (!token) {
-          console.error('No token found.  User needs to login');
+          console.error('No token found. User needs to login');
           return;
         }
 
@@ -177,8 +177,13 @@ const Program = () => {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache'
           },
-          credentials: 'include'
+          credentials: 'include',
+          mode: 'cors'
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
           if (!response.ok) {
             const message = `HTTP error! status: ${response.status}`;
             throw new Error(message);
