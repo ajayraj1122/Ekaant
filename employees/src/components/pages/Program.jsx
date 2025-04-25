@@ -331,9 +331,11 @@ const Program = () => {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
               'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache'
+              'Pragma': 'no-cache',
+              'Accept': 'application/json'
             },
             credentials: 'include',
+            mode: 'cors',
             body: JSON.stringify({
               programId: selectedProgram.id,
               programName: selectedProgram.name,
@@ -345,12 +347,18 @@ const Program = () => {
             })
           });
 
-          const data = await response.json();
+          let data;
+          try {
+            data = await response.json();
+          } catch (error) {
+            await updateCredits(100, 'add');
+            throw new Error('Invalid response from server');
+          }
 
           if (!response.ok || !data.success) {
-            // Refund credits if program join failed
             await updateCredits(100, 'add');
-            throw new Error(data.message || 'Failed to join program');
+            alert(data.message || 'Failed to join program. Please try again.');
+            return;
           }
 
           setAttendEnabled(prev => ({
