@@ -194,7 +194,7 @@ const SignIn = () => {
 
     try {
       const res = await axios.post(
-        "https://ekaant-backend.onrender.com/api/sign-in",
+        `${import.meta.env.VITE_API_URL || 'https://ekaant-backend.onrender.com'}/api/sign-in`,
         formData,
         {
           withCredentials: true,
