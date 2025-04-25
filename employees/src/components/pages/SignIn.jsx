@@ -183,9 +183,9 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/sign-in`, formData, {
+      const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://ekaant.onrender.com';
+      const res = await axios.post(`${baseURL}/api/sign-in`, formData, {
         withCredentials: true,
       });
 
