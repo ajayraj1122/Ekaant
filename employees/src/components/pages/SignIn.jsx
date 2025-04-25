@@ -187,8 +187,12 @@ const SignIn = () => {
       const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://ekaant.onrender.com';
       const res = await axios.post(`${baseURL}/api/sign-in`, formData, {
         withCredentials: true,
-      });
-
+  
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
       if (res.data.success) {
         const { employee, token } = res.data;
         localStorage.setItem("user", JSON.stringify(employee));
