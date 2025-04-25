@@ -136,9 +136,12 @@ export const signin = async (req, res) => {
     const token = jwt.sign({ id: employee._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
     // ✅ Store the token in frontend after login
-    res.status(200).json({ success: true, token, employee });
+    res.status(200)
+    .header('Access-Control-Allow-Origin', 'https://ekaant.onrender.com')
+    .header('Access-Control-Allow-Credentials', 'true')
+    .json({ success: true, token, employee });
   } catch (error) {
-    res.status(500).json({ message: "Server error!", error: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 

@@ -17,10 +17,14 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+    const formData = new FormData(e.target);
     try {
       const res = await axios.post("https://ekaant.onrender.com/api/sign-in", formData, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
       });
 
       if (res.data.success) {
