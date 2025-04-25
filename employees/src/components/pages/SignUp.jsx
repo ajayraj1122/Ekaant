@@ -28,12 +28,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://ekaant-backend.onrender.com/api/sign-up", formData,{
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+      await axios.post("https://ekaant-backend.onrender.com/api/sign-up", formData);
       alert("OTP sent to your email!");
       setStep(2);
     } catch (err) {
@@ -50,11 +45,6 @@ const Signup = () => {
       await axios.post("https://ekaant-backend.onrender.com/api/verify-otp", {
         email: formData.email,
         otp: formData.otp,
-      }, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
       alert("OTP verified successfully!");
       setStep(3);
@@ -76,11 +66,6 @@ const Signup = () => {
       await axios.post("https://ekaant-backend.onrender.com/api/set-password", {
         email: formData.email,
         password: formData.password,
-      }, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
       alert("Sign Up Successful! Please Sign In.");
       navigate("/sign-in");
