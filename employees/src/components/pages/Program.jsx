@@ -162,25 +162,24 @@ const Program = () => {
   const [employeeEmail, setEmployeeEmail] = useState(null);
 
   const fetchEmployeeData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('❌ No authentication token found');
-        navigate('/sign-in');
-        return;
-      }
-
+    const token = localStorage.getItem('token');
+    const response = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include' // Important for cookies if you use them
+    });
       // Verify token is still valid
       try {
         await axios.get("https://ekaant.onrender.com/api/verify-token", {
           headers: { Authorization: `Bearer ${token}` }
         });
-      } catch (tokenError) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate('/sign-in');
-        return;
+      }  catch (error) {
+        console.error('Error:', error);
       }
+    
 
       const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
         headers: { 'Authorization': `Bearer ${token}` }
