@@ -7,6 +7,10 @@ const programProgressSchema = new mongoose.Schema({
     ref: 'Employee',
     required: true
   },
+  employeeEmail: {
+    type: String,
+    required: true
+  },
   programId: {
     type: Number,
     required: true

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -257,10 +256,11 @@ const fetchEmployeePrograms = async () => {
         }
 
         const profileData = await profileResponse.json();
+        const employeeEmail = profileData.employee.email;
         console.log("✅ Fetched Employee Data:", profileData);
 
-        // Then fetch program progress
-        const progressResponse = await fetch('https://ekaant.onrender.com/api/program-progress', {
+        // Then fetch program progress using email
+        const progressResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${employeeEmail}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -270,13 +270,13 @@ const fetchEmployeePrograms = async () => {
           const data = await progressResponse.json();
           if (data.success && data.progress) {
             setEmployeePrograms(data.progress);
-            
+
             const joinedPrograms = data.progress.reduce((acc, prog) => {
               acc[prog.programId] = true;
               return acc;
             }, {});
             setAttendEnabled(joinedPrograms);
-            console.log("✅ Program progress loaded successfully");
+            console.log("✅ Program progress loaded successfully for:", employeeEmail);
           }
         }
       } catch (error) {
