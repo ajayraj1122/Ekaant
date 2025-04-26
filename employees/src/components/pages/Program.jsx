@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,8 +16,6 @@ import {
 import { useCredits } from "../context/CreditsContext";
 import LiveSession from "../pages/LiveSession";
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const defaultLevels = [
   { name: "Introduction", icon: "🔥" },
@@ -150,141 +149,232 @@ const programs = [
 ];
 
 const Program = () => {
-  const navigate = useNavigate();
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [expertPopup, setExpertPopup] = useState(false);
   const [isChecked, setIsChecked] = useState({});
   const [selectedExpertProgram, setSelectedExpertProgram] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [confirmJoin, setConfirmJoin] = useState(false);
   const { credits, updateCredits } = useCredits();
   const [attendEnabled, setAttendEnabled] = useState({});
   const [employeePrograms, setEmployeePrograms] = useState([]);
-  const [employeeEmail, setEmployeeEmail] = useState(null);
 
-  const fetchEmployeeData = async () => {
-    const token = localStorage.getItem('token');
-    const response = await fetch('https://ekaant.onrender.com/api/employee/profile', {
-      method: 'GET',
+// Use setEmployeePrograms in fetchEmployeePrograms
+const fetchEmployeePrograms = async () => {
+  try {
+    const response = await fetch('https://ekaant.onrender.com/api/program-progress', {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include' // Important for cookies if you use them
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
     });
-      // Verify token is still valid
-      try {
-        await axios.get("https://ekaant.onrender.com/api/verify-token", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      }  catch (error) {
-        console.error('Error:', error);
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success && data.progress) {
+        setEmployeePrograms(data.progress);
       }
-    
-
-      const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (!profileResponse.ok) {
-        throw new Error('Failed to fetch profile');
-      }
-
-      const profileData = await profileResponse.json();
-      const email = profileData.employee.email;
-      setEmployeeEmail(email);
-
-      const progressResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${email}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (!progressResponse.ok) {
-        throw new Error('Failed to fetch program progress');
-      }
-
-      const progressData = await progressResponse.json();
-      if (progressData.success && progressData.progress) {
-        const joinedPrograms = progressData.progress.reduce((acc, prog) => {
-          acc[prog.programId] = true;
-          return acc;
-        }, {});
-        
-        setEmployeePrograms(progressData.progress);
-        setAttendEnabled(joinedPrograms);
-      }
-    } catch (error) {
-      console.error('❌ Error fetching data:', error);
     }
-  };
+  } catch (error) {
+    console.error('Failed to fetch employee programs:', error);
+  }
+};
 
   useEffect(() => {
-    fetchEmployeeData();
+    let isMounted = true;
 
-    // Add refresh listener
-    const handleRefresh = () => {
-      fetchEmployeeData();
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No authentication token found');
+          return;
+        }
+
+        // First fetch employee profile
+        const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!profileResponse.ok) {
+          throw new Error('Failed to fetch employee profile');
+        }
+
+        const profileData = await profileResponse.json();
+        const employeeEmail = profileData.employee.email;
+
+        // Then fetch programs specific to this employee
+        const programResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${employeeEmail}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (programResponse.ok) {
+          const data = await programResponse.json();
+          if (data.success && data.progress) {
+            setEmployeePrograms(data.progress);
+            
+            const joinedPrograms = data.progress.reduce((acc, prog) => {
+              acc[prog.programId] = true;
+              return acc;
+            }, {});
+            setAttendEnabled(joinedPrograms);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
     };
 
-    window.addEventListener('programUpdated', handleRefresh);
-    return () => window.removeEventListener('programUpdated', handleRefresh);
+    if (isMounted) {
+      fetchData();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('❌ No authentication token found');
+          return;
+        }
+
+        // First fetch employee profile
+        const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!profileResponse.ok) {
+          throw new Error('Failed to fetch employee profile');
+        }
+
+        const profileData = await profileResponse.json();
+        console.log("✅ Fetched Employee Data:", profileData);
+
+        // Then fetch program progress
+        const progressResponse = await fetch('https://ekaant.onrender.com/api/program-progress', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (progressResponse.ok) {
+          const data = await progressResponse.json();
+          if (data.success && data.progress) {
+            setEmployeePrograms(data.progress);
+            
+            const joinedPrograms = data.progress.reduce((acc, prog) => {
+              acc[prog.programId] = true;
+              return acc;
+            }, {});
+            setAttendEnabled(joinedPrograms);
+            console.log("✅ Program progress loaded successfully");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Error fetching employee data:", error);
+      }
+    };
+
+    fetchEmployeeData();
   }, []);
 
   const handleJoin = async (programId) => {
-    if (!isChecked[programId] || !employeeEmail) return;
-    
-    if (credits < 100) {
-      alert("Not enough credits!");
-      return;
-    }
+    if (isChecked[programId]) {
+      if (credits >= 100) {
+        try {
+          const selectedProgram = programs.find(p => p.id === programId);
+          const newCredits = credits - 100;
+          await updateCredits(newCredits, 'set');
 
-    try {
-      const selectedProgram = programs.find(p => p.id === programId);
-      const newCredits = credits - 100;
-      await updateCredits(newCredits, 'set');
+          // Fetch employee data from MongoDB
+          const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          });
 
-      const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          programId: selectedProgram.id,
-          programName: selectedProgram.name,
-          expertName: selectedProgram.expert.name,
-          currentLevel: 0,
-          completedLevel: 0,
-          levelName: selectedProgram.name,
-          employeeEmail: employeeEmail
-        })
-      });
+          if (!profileResponse.ok) {
+            throw new Error('Failed to fetch employee data');
+          }
 
-      if (!response.ok) {
-        throw new Error('Failed to update progress');
+          const data = await profileResponse.json();
+          const employeeEmail = data.employee.email;
+
+          if (!employeeEmail) {
+            throw new Error('Employee email not found');
+          }
+
+          // Initialize/Update program progress
+          const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({
+              programId: selectedProgram.id,
+              programName: selectedProgram.name,
+              expertName: selectedProgram.expert.name,
+              currentLevel: 0,
+              completedLevel: 0,
+              levelName: selectedProgram.name,
+              employeeEmail: employeeEmail
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to update progress');
+          }
+
+          // Update attendEnabled state without localStorage
+          setAttendEnabled(prev => ({
+            ...prev,
+            [programId]: true
+          }));
+
+          // Fetch updated program progress after joining
+          await fetchEmployeePrograms();
+
+          const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+          
+          // Create activity log instead of using localStorage
+          try {
+            await fetch('https://ekaant.onrender.com/api/activity-log', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({
+                type: 'program',
+                month: currentMonth,
+                value: 5
+              })
+            });
+          } catch (error) {
+            console.error('Failed to log activity:', error);
+          }
+
+          window.dispatchEvent(new Event('chartDataUpdated'));
+
+          setConfirmJoin(false);
+          setExpertPopup(false);
+        } catch (error) {
+          console.error('Failed to update credits or progress:', error);
+          alert('Failed to join program. Please try again.');
+        }
+      } else {
+        alert("Not enough credits!");
       }
-
-      // Update state and trigger refresh
-      setAttendEnabled(prev => ({...prev, [programId]: true}));
-      window.dispatchEvent(new Event('programUpdated'));
-
-      // Update bar chart
-      const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
-      await fetch('https://ekaant.onrender.com/api/barchart/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          month: currentMonth,
-          category: 'Program'
-        })
-      });
-
-      window.dispatchEvent(new Event('chartDataUpdated'));
-      setExpertPopup(false);
-    } catch (error) {
-      console.error('❌ Failed to join program:', error);
-      alert('Failed to join program. Please try again.');
     }
   };
 
