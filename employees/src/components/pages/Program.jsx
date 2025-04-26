@@ -15,6 +15,8 @@ import {
 import { useCredits } from "../context/CreditsContext";
 import LiveSession from "../pages/LiveSession";
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const defaultLevels = [
   { name: "Introduction", icon: "🔥" },
@@ -148,120 +150,142 @@ const programs = [
 ];
 
 const Program = () => {
+  const navigate = useNavigate();
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [expertPopup, setExpertPopup] = useState(false);
   const [isChecked, setIsChecked] = useState({});
   const [selectedExpertProgram, setSelectedExpertProgram] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [confirmJoin, setConfirmJoin] = useState(false);
   const { credits, updateCredits } = useCredits();
   const [attendEnabled, setAttendEnabled] = useState({});
   const [employeePrograms, setEmployeePrograms] = useState([]);
+  const [employeeEmail, setEmployeeEmail] = useState(null);
 
-  const BASE_URL = "https://ekaant.onrender.com";
-  const fetchEmployeePrograms = async () => {
+  const fetchEmployeeData = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/program-progress`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('❌ No authentication token found');
+        navigate('/sign-in');
+        return;
+      }
+
+      // Verify token is still valid
+      try {
+        await axios.get("https://ekaant.onrender.com/api/verify-token", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (tokenError) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/sign-in');
+        return;
+      }
+
+      const profileResponse = await fetch('https://ekaant.onrender.com/api/employee/profile', {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.progress) {
-          setEmployeePrograms(data.progress);
-        }
+
+      if (!profileResponse.ok) {
+        throw new Error('Failed to fetch profile');
+      }
+
+      const profileData = await profileResponse.json();
+      const email = profileData.employee.email;
+      setEmployeeEmail(email);
+
+      const progressResponse = await fetch(`https://ekaant.onrender.com/api/program-progress?email=${email}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!progressResponse.ok) {
+        throw new Error('Failed to fetch program progress');
+      }
+
+      const progressData = await progressResponse.json();
+      if (progressData.success && progressData.progress) {
+        const joinedPrograms = progressData.progress.reduce((acc, prog) => {
+          acc[prog.programId] = true;
+          return acc;
+        }, {});
+        
+        setEmployeePrograms(progressData.progress);
+        setAttendEnabled(joinedPrograms);
       }
     } catch (error) {
-      console.error('Failed to fetch employee programs:', error);
+      console.error('❌ Error fetching data:', error);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+    fetchEmployeeData();
 
-        const profileRes = await fetch(`${BASE_URL}/api/employee/profile`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const profileData = await profileRes.json();
-        const email = profileData.employee.email;
-
-        const progressRes = await fetch(`${BASE_URL}/api/program-progress?email=${email}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await progressRes.json();
-
-        if (data.success && data.progress) {
-          setEmployeePrograms(data.progress);
-          const joined = {};
-          data.progress.forEach(p => joined[p.programId] = true);
-          setAttendEnabled(joined);
-        }
-      } catch (err) {
-        console.error('Error fetching employee data:', err);
-      }
+    // Add refresh listener
+    const handleRefresh = () => {
+      fetchEmployeeData();
     };
 
-    fetchData();
+    window.addEventListener('programUpdated', handleRefresh);
+    return () => window.removeEventListener('programUpdated', handleRefresh);
   }, []);
 
   const handleJoin = async (programId) => {
-    if (isChecked[programId] && credits >= 100) {
-      try {
-        const program = programs.find(p => p.id === programId);
-        const newCredits = credits - 100;
-        await updateCredits(newCredits, 'set');
-
-        const profileRes = await fetch(`${BASE_URL}/api/employee/profile`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        const profile = await profileRes.json();
-        const email = profile.employee.email;
-
-        await fetch(`${BASE_URL}/api/program-progress/update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            programId: program.id,
-            programName: program.name,
-            expertName: program.expert.name,
-            currentLevel: 0,
-            completedLevel: 0,
-            levelName: program.name,
-            employeeEmail: email
-          })
-        });
-
-        setAttendEnabled(prev => ({ ...prev, [programId]: true }));
-        await fetchEmployeePrograms();
-
-        const month = new Date().toLocaleString('en-US', { month: 'short' });
-
-        await fetch(`${BASE_URL}/api/barchart/update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ month, category: 'Program' })
-        });
-
-        window.dispatchEvent(new Event('chartDataUpdated'));
-        setExpertPopup(false);
-        setConfirmJoin(false);
-
-      } catch (err) {
-        console.error('Join error:', err);
-        alert('Failed to join program. Try again.');
-      }
-    } else {
+    if (!isChecked[programId] || !employeeEmail) return;
+    
+    if (credits < 100) {
       alert("Not enough credits!");
+      return;
+    }
+
+    try {
+      const selectedProgram = programs.find(p => p.id === programId);
+      const newCredits = credits - 100;
+      await updateCredits(newCredits, 'set');
+
+      const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          programId: selectedProgram.id,
+          programName: selectedProgram.name,
+          expertName: selectedProgram.expert.name,
+          currentLevel: 0,
+          completedLevel: 0,
+          levelName: selectedProgram.name,
+          employeeEmail: employeeEmail
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update progress');
+      }
+
+      // Update state and trigger refresh
+      setAttendEnabled(prev => ({...prev, [programId]: true}));
+      window.dispatchEvent(new Event('programUpdated'));
+
+      // Update bar chart
+      const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+      await fetch('https://ekaant.onrender.com/api/barchart/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          month: currentMonth,
+          category: 'Program'
+        })
+      });
+
+      window.dispatchEvent(new Event('chartDataUpdated'));
+      setExpertPopup(false);
+    } catch (error) {
+      console.error('❌ Failed to join program:', error);
+      alert('Failed to join program. Please try again.');
     }
   };
 
