@@ -316,8 +316,10 @@ const fetchEmployeePrograms = async () => {
           // Initialize/Update program progress
           const response = await fetch('https://ekaant.onrender.com/api/program-progress/update', {
             method: 'POST',
+            withCredentials: true,
             headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
               'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
