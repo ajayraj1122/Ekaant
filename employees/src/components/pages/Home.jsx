@@ -15,7 +15,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-[#1A237E] to-[#311B92] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab')] opacity-15 bg-cover bg-center animate-gentle-sway" style={{
+      <div className="absolute inset-0" style={{
         animation: 'gentleSway 20s ease-in-out infinite',
         transformOrigin: 'center',
         backgroundSize: '160% 160%'
