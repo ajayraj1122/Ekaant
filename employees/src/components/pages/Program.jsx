@@ -158,24 +158,27 @@ const Program = () => {
   const [attendEnabled, setAttendEnabled] = useState({});
   const [employeePrograms, setEmployeePrograms] = useState([]);
 
-// Use setEmployeePrograms in fetchEmployeePrograms
-const fetchEmployeePrograms = async () => {
-  try {
-    const response = await fetch('https://ekaant.onrender.com/api/program-progress', {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+  const fetchEmployeePrograms = async () => {
+    try {
+      const response = await fetch('https://ekaant.onrender.com/api/program-progress', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.progress) {
+          setEmployeePrograms(data.progress);
+        }
       }
-    });
-    if (response.ok) {
-      const data = await response.json();
-      if (data.success && data.progress) {
-        setEmployeePrograms(data.progress);
-      }
+    } catch (error) {
+      console.error('Failed to fetch employee programs:', error);
     }
-  } catch (error) {
-    console.error('Failed to fetch employee programs:', error);
-  }
-};
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -213,7 +216,7 @@ const fetchEmployeePrograms = async () => {
           const data = await programResponse.json();
           if (data.success && data.progress) {
             setEmployeePrograms(data.progress);
-            
+
             const joinedPrograms = data.progress.reduce((acc, prog) => {
               acc[prog.programId] = true;
               return acc;
@@ -347,7 +350,7 @@ const fetchEmployeePrograms = async () => {
           await fetchEmployeePrograms();
 
           const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
-          
+
           // Create activity log instead of using localStorage
           try {
             await fetch('https://ekaant.onrender.com/api/activity-log', {

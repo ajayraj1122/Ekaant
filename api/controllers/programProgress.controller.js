@@ -14,10 +14,19 @@ export const updateProgress = async (req, res) => {
     }
 
     // Validate token and employee ID
-    if (!employeeId) {
+    if (!employeeId || !req.headers.authorization) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid or expired authentication token'
+        message: 'Invalid or missing authentication token'
+      });
+    }
+    
+    // Validate token format
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token format'
       });
     }
 
