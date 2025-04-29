@@ -349,26 +349,54 @@ const Program = () => {
           // Fetch updated program progress after joining
           await fetchEmployeePrograms();
 
-          const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+          // const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
 
-          // Create activity log instead of using localStorage
+          // // Create activity log instead of using localStorage
+          // try {
+          //   await fetch('https://ekaant.onrender.com/api/activity-log', {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //       'Authorization': `Bearer ${localStorage.getItem('token')}`
+          //     },
+          //     body: JSON.stringify({
+          //       type: 'program',
+          //       month: currentMonth,
+          //       value: 5
+          //     })
+          //   });
+          // } catch (error) {
+          //   console.error('Failed to  update bar chart data ', error);
+          // }
+
+          const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
           try {
-            await fetch('https://ekaant.onrender.com/api/activity-log', {
+            const token = localStorage.getItem("token");
+            if (!token) {
+              throw new Error('No authentication token found');
+            }
+  
+            const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
               },
               body: JSON.stringify({
-                type: 'program',
                 month: currentMonth,
-                value: 5
+                category: 'program'
               })
             });
+  
+            if (!response.ok) {
+              throw new Error('Failed to update bar chart data');
+            }
+  
+            // Refresh chart data
+            window.dispatchEvent(new Event('chartDataUpdated'));
           } catch (error) {
-            console.error('Failed to log activity:', error);
+            console.error('❌ Failed to update bar chart:', error.message);
           }
-
           window.dispatchEvent(new Event('chartDataUpdated'));
 
           setConfirmJoin(false);
