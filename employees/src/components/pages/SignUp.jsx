@@ -55,28 +55,6 @@ const Signup = () => {
     }
   };
 
-  // const handleSetPassword = async (e) => {
-  //   e.preventDefault();
-  //   if (formData.password !== formData.confirmPassword) {
-  //     setError("Passwords do not match!");
-  //     return;
-  //   }
-  //   setLoading(true);
-  //   try {
-  //     const res = await axios.post("https://ekaant.onrender.com/api/set-password", {
-  //       email: formData.email,
-  //       password: formData.password,
-  //     }, { withCredentials: true });
-
-  //     if (res.data.success) {
-  //       alert("Sign Up Successful!");
-  //       navigate("/analytics");
-  //     }
-  //   } catch {
-  //     setError("Sign up failed!");
-  //     setLoading(false);
-  //   }
-  // };
   const handleSetPassword = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -85,18 +63,21 @@ const Signup = () => {
     }
     setLoading(true);
     try {
-      await axios.post("https://ekaant.onrender.com/api/set-password", {
+      const res = await axios.post("https://ekaant.onrender.com/api/set-password", {
         email: formData.email,
         password: formData.password,
-      });
-      alert("Sign Up Successful! Please Sign In.");
-      navigate("/sign-in");
-    } catch (err) {
-      setError(err.response?.data?.message || "Error setting password!");
-    } finally {
+      }, { withCredentials: true });
+
+      if (res.data.success) {
+        alert("Sign Up Successful!");
+        navigate("/sign-in");
+      }
+    } catch {
+      setError("Sign up failed!");
       setLoading(false);
     }
   };
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-[#E6F3F3] to-[#F7FAFC] relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7')] opacity-100 bg-cover bg-center animate-gentle-sway" style={{
