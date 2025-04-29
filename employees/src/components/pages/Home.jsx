@@ -1,7 +1,36 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+const waveAnimationStyles = {
+  gradient: { animation: 'gradient 20s ease infinite' }
+};
+
+const keyframesStyle = `
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes scale {
+    0% { transform: scale(1) rotate(var(--rotation, 0deg)); }
+    50% { transform: scale(1.1) rotate(var(--rotation, 180deg)); }
+    100% { transform: scale(1) rotate(var(--rotation, 360deg)); }
+  }
+  @keyframes float {
+    0% { transform: translateY(5px) rotate(var(--rotation, 10deg)); }
+    50% { transform: translateY(-10px) rotate(var(--rotation, 20deg)); }
+    100% { transform: translateY(10px) rotate(var(--rotation, 30deg)); }
+  }
+`;
+
 const Home = () => {
+  useEffect(() => {
+    // Add keyframes to document
+    const style = document.createElement('style');
+    style.textContent = keyframesStyle;
+    document.head.appendChild(style);
+    return () => style.remove();
+  }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
@@ -28,6 +57,17 @@ const Home = () => {
       ),
       title: "Anonymised Data",
       description: "Employers only see overall company wellbeing metrics"
+    },
+    {
+      icon: (
+        <div className="bg-[#4CAF50]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#81C784]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+      ),
+      title: "Secured Data",
+      description: "Employers only see overall Growth and Progress"
     }
   ];
 
@@ -45,24 +85,44 @@ const Home = () => {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex ">
       {/* Left Section */}
-      <div className="w-1/2 flex flex-col relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7')",
-            filter: 'brightness(0.9)'
-          }}
-        />
+      <div 
+        className="w-2/5 flex flex-col relative overflow-hidden m-2 rounded-2xl"
+        style={{
+          background: 'linear-gradient(-45deg, #4171f5, #3451b2, #2196f3, #2979ff)',
+          backgroundSize: '300% 300%',
+          ...waveAnimationStyles.gradient
+        }}
+      >
+        <div className="absolute inset-0 grid grid-cols-12 grid-rows-16 gap-3 p-6 opacity-40">
+          {[...Array(192)].map((_, i) => (
+            <div
+              key={i}
+              className="rounded-lg backdrop-blur-sm"
+              style={{
+                background: `rgba(255, 255, 255, ${0.1 + (i % 3) * 0.05})`,
+                animation: `${i % 2 === 0 ? 'float' : 'scale'} ${3 + (i % 4)}s ease-in-out infinite`,
+                animationDelay: `${i * 0.1}s`,
+                transform: `rotate(${(i % 8) * 45}deg)`,
+                height: i % 3 === 0 ? '100%' : i % 2 === 0 ? '75%' : '50%',
+                width: i % 4 === 0 ? '100%' : i % 2 === 0 ? '80%' : '60%',
+                '--rotation': `${(i % 4) * 90}deg`
+              }}
+            />
+          ))}
+        </div>
         <div className="relative z-10 flex flex-col h-full p-12">
           <div className="flex-grow flex flex-col items-center justify-start pt-20">
-            <img src="\logo-03.png" alt="SimpleFlow" className="h-16 mb-12" />
-            <div className="text-white text-center mb-6">
-              <h1 className="text-5xl font-bold mb-4">Welcome to EKAANT</h1>
-              <p className="text-2xl">Your Gateway to Effortless Management.</p>
+            <div className="flex items-center mb-12">
+              <img src="/logo-03.png" alt="Ekaant" className="h-16" />
+              <span className="text-white text-4xl font-bold ml-2">EKAANT</span>
             </div>
-            
+            <div className="text-white text-center mb-6">
+              <h1 className="text-5xl font-bold mb-4">Welcome to Ekaant</h1>
+              <p className="text-2xl">Empowering Mental Health in the Workplace</p>
+            </div>
+
             <div className="text-white text-center mt-auto">
               <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="bg-[#7C4DFF]/20 p-4 rounded-xl">
@@ -91,29 +151,31 @@ const Home = () => {
       </div>
 
       {/* Right Section - Sign In Form */}
-      <div className="w-1/2 p-12 flex flex-col justify-center items-center">
+      <div className="w-1/2 p-12 flex flex-col justify-center items-center mt-2">
         <div className="w-full max-w-md">
-          <div className="flex items-center justify-between mb-8">
-            <img src="/SimpleFlow-logo.png" alt="SimpleFlow" className="h-8" />
+          <div className="flex items-center mb-8">
+            <img src="/logo-03.png" alt="Ekaant" className="h-16" />
+            <span className="text-4xl font-bold ml-2">EKAANT</span>
           </div>
 
-          <div className="flex mb-8">
-            <button 
-              onClick={() => navigate('/sign-up')}
-              className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-l hover:bg-blue-700 transition-all"
-            >
-              Sign Up
-            </button>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Start Your Transformational Journey Today
+            </h2>
+            <p className="text-gray-600 text-sm italic">
+              "Your path to mental well-being begins with a single step. Let us guide you through this journey of self-discovery and growth."
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4 mb-8">
             <button 
               onClick={() => navigate('/sign-in')}
-              className="flex-1 py-2 px-4 bg-gray-100 text-gray-600 rounded-r hover:bg-gray-200 transition-all"
+              className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
-              Sign In
+              Begin Your Journey
             </button>
+           
           </div>
-
-         
-          
         </div>
       </div>
     </div>

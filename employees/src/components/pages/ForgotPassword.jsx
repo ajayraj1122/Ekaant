@@ -1,7 +1,29 @@
 
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+
+const waveAnimationStyles = {
+  gradient: { animation: 'gradient 20s ease infinite' }
+};
+
+const keyframesStyle = `
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes scale {
+    0% { transform: scale(1) rotate(var(--rotation, 0deg)); }
+    50% { transform: scale(1.1) rotate(var(--rotation, 180deg)); }
+    100% { transform: scale(1) rotate(var(--rotation, 360deg)); }
+  }
+  @keyframes float {
+    0% { transform: translateY(5px) rotate(var(--rotation, 10deg)); }
+    50% { transform: translateY(-10px) rotate(var(--rotation, 20deg)); }
+    100% { transform: translateY(10px) rotate(var(--rotation, 30deg)); }
+  }
+`;
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -11,7 +33,62 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
+
+  const slides = [
+    {
+      icon: (
+        <div className="bg-[#7C4DFF]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#B388FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+      ),
+      title: "Secure Reset",
+      description: "Reset your password securely with our multi-step process"
+    },
+    {
+      icon: (
+        <div className="bg-[#536DFE]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#82B1FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+      ),
+      title: "Email Verification",
+      description: "Verification code sent directly to your email"
+    },
+    {
+      icon: (
+        <div className="bg-[#4CAF50]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#81C784]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+      ),
+      title: "Quick Process",
+      description: "Fast and easy password recovery process"
+    }
+  ];
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = keyframesStyle;
+    document.head.appendChild(style);
+    
+    setMounted(true);
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    
+    return () => {
+      clearInterval(interval);
+      setMounted(false);
+      style.remove();
+    };
+  }, []);
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -24,7 +101,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const res = await axios.post("https://ekaant-backend.onrender.com/api/send-otp-reset", { email }, { withCredentials: true });
+      const res = await axios.post("https://ekaant.onrender.com/api/send-otp-reset", { email }, { withCredentials: true });
       setMessage(res.data.message);
       setStep(2);
     } catch (err) {
@@ -36,33 +113,33 @@ const ForgotPassword = () => {
     e.preventDefault();
     setMessage("");
     setError("");
-  
+
     if (!otp) {
       setError("OTP is required!");
       return;
     }
-  
+
     try {
-      const res = await axios.post("https://ekaant-backend.onrender.com/api/verify-otp-reset", { email, otp }, { withCredentials: true });
+      const res = await axios.post("https://ekaant.onrender.com/api/verify-otp-reset", { email, otp }, { withCredentials: true });
       setMessage(res.data.message);
       setStep(3);
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP. Try again.");
     }
   };
-  
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setMessage("");
     setError("");
-  
+
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-  
+
     try {
-      const res = await axios.post("https://ekaant-backend.onrender.com/api/reset-password", { email, newPassword }, { withCredentials: true });
+      const res = await axios.post("https://ekaant.onrender.com/api/reset-password", { email, newPassword }, { withCredentials: true });
       setMessage(res.data.message);
       navigate("/sign-in");
     } catch (err) {
@@ -71,114 +148,129 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-[#E6F3F3] to-[#F7FAFC] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7')] opacity-100 bg-cover bg-center animate-gentle-sway" style={{
-        animation: 'gentleSway 20s ease-in-out infinite',
-        transformOrigin: 'center',
-        backgroundSize: '160% 160%'
-      }} />
-      <style>{`
-        @keyframes gentleSway {
-          0%, 100% { background-position: center; }
-          55% { background-position: 55% 65%; }
-        }
-      `}</style>
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-pink-500/30 to-blue-500/30 rounded-bl-full blur-3xl -z-10" />
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-purple-100/40 to-indigo-100/40 rounded-tr-full blur-3xl -z-10" />
-      <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px]" />
+    <div className="min-h-screen flex">
+      {/* Left Section */}
+      <div 
+        className="w-2/5 flex flex-col relative overflow-hidden m-4 rounded-2xl"
+        style={{
+          background: 'linear-gradient(-45deg, #4171f5, #3451b2, #2196f3, #2979ff)',
+          backgroundSize: '300% 300%',
+          ...waveAnimationStyles.gradient
+        }}
+      >
+        <div className="absolute inset-0 grid grid-cols-12 grid-rows-16 gap-3 p-6 opacity-40">
+          {[...Array(192)].map((_, i) => (
+            <div
+              key={i}
+              className="rounded-lg backdrop-blur-sm"
+              style={{
+                background: `rgba(255, 255, 255, ${0.1 + (i % 3) * 0.05})`,
+                animation: `${i % 2 === 0 ? 'float' : 'scale'} ${3 + (i % 4)}s ease-in-out infinite`,
+                animationDelay: `${i * 0.1}s`,
+                transform: `rotate(${(i % 8) * 45}deg)`,
+                height: i % 3 === 0 ? '100%' : i % 2 === 0 ? '75%' : '50%',
+                width: i % 4 === 0 ? '100%' : i % 2 === 0 ? '80%' : '60%',
+                '--rotation': `${(i % 4) * 90}deg`
+              }}
+            />
+          ))}
+        </div>
 
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 backdrop-blur-sm p-6 rounded-xl">
-        <div className="order-2 lg:order-1 animate-fade-in">
-          <div className="space-y-6 max-w-lg mx-auto lg:mx-0 backdrop-blur-sm p-6 rounded-xl">
-            <div className="flex items-center mb-8">
-              <img src="/logo-03.png" alt="Ekaant" className="h-20 w-50 rounded-full" />
+        <div className="relative z-10 flex flex-col h-full p-12">
+          <div className="flex-grow flex flex-col items-center justify-start pt-20">
+            <div className="flex items-center mb-12">
+              <img src="/logo-03.png" alt="Ekaant" className="h-16" />
+              <span className="text-white text-4xl font-bold ml-4">Ekaant</span>
+            </div>
+            <div className="text-white text-center mb-6">
+              <h1 className="text-5xl font-bold mb-4">Password Recovery</h1>
+              <p className="text-2xl">Secure Password Reset Process</p>
             </div>
 
-            <h2 className="text-[40px] text-[#333333] font-semibold mb-12 justify-center flex items-center" style={{ fontFamily: 'Poppins, sans-serif' }}>Reset your password securely</h2>
-            <div className="space-y-12">
-              <div className="flex items-start space-x-6">
-                <div className="bg-blue-100 p-4 rounded-full justify-center flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <span className="text-[#4A4A4A] text-left flex-1">
-                  <span className="font-semibold block mb-3 text-xl">Secure Password Reset</span>
-                  <span className="text-base">We'll help you reset your password safely and securely</span>
-                </span>
+            <div className="text-white text-center mt-auto">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                {slides[currentSlide].icon}
+                <h2 className="text-4xl font-bold">{slides[currentSlide].title}</h2>
               </div>
-              <div className="flex items-start space-x-6">
-                <div className="bg-blue-100 p-4 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <span className="text-[#4A4A4A] text-left flex-1">
-                  <span className="font-semibold block mb-3 text-xl">Two-Step Verification</span>
-                  <span className="text-base">We use OTP verification to ensure it's really you</span>
-                </span>
-              </div>
+              <p className="text-xl opacity-90">{slides[currentSlide].description}</p>
+            </div>
+
+            <div className="flex justify-center space-x-2 mt-12">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    currentSlide === index ? "bg-white w-8" : "bg-white/50"
+                  }`}
+                  onClick={() => setCurrentSlide(index)}
+                />
+              ))}
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="order-1 lg:order-2 animate-fade-in">
+      {/* Right Section */}
+      <div className="w-1/2 p-12 flex flex-col justify-center items-center">
+        <div className="w-full max-w-md">
+          <div className="flex items-center mb-12">
+            <img src="/logo-03.png" alt="Ekaant" className="h-16" />
+            <span className="text-4xl font-bold ml-2">EKAANT</span>
+          </div>
+
           <div className="bg-white/40 backdrop-blur-md p-8 rounded-xl border border-white/20 shadow-lg">
-          
-
-            <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Reset Password</h2>
             {message && <p className="text-green-500 text-center mb-4">{message}</p>}
             {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
             {step === 1 && (
-              <form onSubmit={handleSendOtp} className="space-y-4">
+              <form onSubmit={handleSendOtp} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                   <input
                     type="email"
                     placeholder="Enter your email"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
-                <button type="submit" className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200">
+                <button type="submit" className="w-full  bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200">
                   Send OTP
                 </button>
               </form>
             )}
 
             {step === 2 && (
-              <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <form onSubmit={handleVerifyOtp} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
                   <input
                     type="text"
                     placeholder="Enter OTP sent to your email"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                    required
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
+                    required
                   />
                 </div>
-                <button type="submit" className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200">
+                <button type="submit" className="w-full  bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200">
                   Verify OTP
                 </button>
               </form>
             )}
 
             {step === 3 && (
-              <form onSubmit={handleResetPassword} className="space-y-4">
+              <form onSubmit={handleResetPassword} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
                   <input
                     type="password"
                     placeholder="••••••••"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                    required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -187,12 +279,12 @@ const ForgotPassword = () => {
                     type="password"
                     placeholder="••••••••"
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                    required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
                   />
                 </div>
-                <button type="submit" className="w-full bg-[#1E1B4B] text-white py-3 rounded-lg hover:bg-[#1E1B4B]/90 transition duration-200">
+                <button type="submit" className="w-full  bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200">
                   Reset Password
                 </button>
               </form>
@@ -206,10 +298,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-
-      <footer className="absolute bottom-8 left-8 flex items-center justify-center w-full">
-        <p className="text-gray-500 flex items-center justify-center">© {new Date().getFullYear()} Ekaant. All rights reserved.</p>
-      </footer>
     </div>
   );
 };
