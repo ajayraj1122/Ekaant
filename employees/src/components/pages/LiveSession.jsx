@@ -138,14 +138,14 @@ const LiveSession = () => {
         mail: "mansi.91289@gmail.com",
         availability: [
           {
-            date: "2025-04-21",
+            date: "2025-05-21",
             slots: [
               { start: "2:00 PM", end: "3:00 PM" },
               { start: "4:00 PM", end: "5:00 PM" }
             ]
           },
           {
-            date: "2025-04-29",
+            date: "2025-05-29",
             slots: [
               { start: "10:00 AM", end: "11:00 AM" },
               { start: "3:00 PM", end: "4:00 PM" }
@@ -170,7 +170,7 @@ const LiveSession = () => {
           mail: "mansi.91289@gmail.com",
           availability: [
             {
-              date: "2025-04-16",
+              date: "2025-05-16",
               slots: [
                 { start: "10:00 AM", end: "11:00 AM" },
                 { start: "2:00 PM", end: "3:00 PM" },
@@ -178,7 +178,7 @@ const LiveSession = () => {
               ],
             },
             {
-              date: "2025-04-17",
+              date: "2025-05-17",
               slots: [
                 { start: "11:00 AM", end: "12:00 PM" },
                 { start: "3:00 PM", end: "4:00 PM" },
@@ -204,14 +204,14 @@ const LiveSession = () => {
         mail: "mansi.91289@gmail.com",
         availability: [
           {
-            date: "2025-04-15",
+            date: "2025-05-15",
             slots: [
               { start: "2:00 PM", end: "3:00 PM" },
               { start: "4:00 PM", end: "5:00 PM" }
             ]
           },
           {
-            date: "2025-04-16",
+            date: "2025-05-16",
             slots: [
               { start: "10:00 AM", end: "11:00 AM" },
               { start: "3:00 PM", end: "4:00 PM" }
@@ -236,7 +236,7 @@ const LiveSession = () => {
         mail: "ajayguptap8210p@gmail.com",
         availability: [
           {
-            date: "2024-04-26",
+            date: "2024-05-26",
             slots: [
               { start: "10:00 AM", end: "11:00 AM" },
               { start: "1:00 PM", end: "2:00 PM" },
@@ -288,7 +288,7 @@ const LiveSession = () => {
         mail: "ajayguptap8210p@gmail.com",
         availability: [
           {
-            date: "2024-03-25",
+            date: "2024-05-25",
             slots: [
               { start: "10:00 AM", end: "11:00 AM" },
               { start: "2:00 PM", end: "3:00 PM" },
@@ -340,7 +340,7 @@ const LiveSession = () => {
         mail: "ajayguptap8210p@gmail.com",
         availability: [
           {
-            date: "2024-04-25",
+            date: "2024-05-25",
             slots: [
               { start: "10:00 AM", end: "11:00 AM" },
               { start: "1:00 PM", end: "2:00 PM" },
