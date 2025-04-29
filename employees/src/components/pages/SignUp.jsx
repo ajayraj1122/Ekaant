@@ -27,21 +27,17 @@ const Signup = () => {
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-
     try {
-      const response = await axios.post("https://ekaant.onrender.com/api/sign-up", formData);
-      if (response.data.message) {
-        setMessage(response.data.message);
-        setStep(2);
-      }
+      await axios.post("https://ekaant.onrender.com/api/sign-up", formData);
+      alert("OTP sent to your email!");
+      setStep(2);
     } catch (err) {
-      console.error("Signup Error:", err);
-      setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
+      setError(err.response?.data?.message || "Error sending OTP!");
     } finally {
       setLoading(false);
     }
   };
+
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setLoading(true);

@@ -1,101 +1,121 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const Home = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
 
+  const slides = [
+    {
+      icon: (
+        <div className="bg-[#7C4DFF]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#B388FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+      ),
+      title: "100% Confidential",
+      description: "We'll never share your personal information with your employer"
+    },
+    {
+      icon: (
+        <div className="bg-[#536DFE]/20 p-4 rounded-xl mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#82B1FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+      ),
+      title: "Anonymised Data",
+      description: "Employers only see overall company wellbeing metrics"
+    }
+  ];
+
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+      setMounted(false);
+    };
   }, []);
 
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-[#1A237E] to-[#311B92] relative overflow-hidden">
-      <div className="absolute inset-0" style={{
-        animation: 'gentleSway 20s ease-in-out infinite',
-        transformOrigin: 'center',
-        backgroundSize: '160% 160%'
-      }} />
-      <style>{`
-        @keyframes gentleSway {
-          0%, 100% { background-position: center; }
-          55% { background-position: 55% 65%; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#5E35B1] to-[#3949AB] rounded-bl-full opacity-30 blur-3xl -z-10" />
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-[#4527A0] to-[#283593] rounded-tr-full opacity-30 blur-3xl -z-10" />
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
-
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 p-6">
-        <div className="order-2 lg:order-1 animate-fade-in">
-          <div className="space-y-8 backdrop-blur-md bg-white/10 p-8 rounded-2xl border border-white/20 shadow-2xl">
-            <div className="flex items-center mb-8 animate-[float_4s_ease-in-out_infinite]">
-              <img src="/logo-03.png" alt="Ekaant" className="h-16 w-16 rounded-full" />
-              <span className="ml-4 text-3xl font-bold bg-gradient-to-r from-[#E8EAF6] to-[#C5CAE9] bg-clip-text text-transparent">EKAANT</span>
+    <div className="min-h-screen flex">
+      {/* Left Section */}
+      <div className="w-1/2 flex flex-col relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7')",
+            filter: 'brightness(0.9)'
+          }}
+        />
+        <div className="relative z-10 flex flex-col h-full p-12">
+          <div className="flex-grow flex flex-col items-center justify-start pt-20">
+            <img src="\logo-03.png" alt="SimpleFlow" className="h-16 mb-12" />
+            <div className="text-white text-center mb-6">
+              <h1 className="text-5xl font-bold mb-4">Welcome to EKAANT</h1>
+              <p className="text-2xl">Your Gateway to Effortless Management.</p>
             </div>
-
-            <h2 className="text-4xl font-bold mb-8 text-white leading-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>We take your privacy <span className="bg-gradient-to-r from-[#7C4DFF] to-[#536DFE] bg-clip-text text-transparent">seriously</span></h2>
             
-            <div className="space-y-8">
-              <div className="flex items-start space-x-6 bg-white/5 p-6 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-lg">
+            <div className="text-white text-center mt-auto">
+              <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="bg-[#7C4DFF]/20 p-4 rounded-xl">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#B388FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-white mb-2">100% Confidential</h3>
-                  <p className="text-[#E8EAF6]">We'll never share your personal information with your employer</p>
-                </div>
+                <h2 className="text-4xl font-bold">{slides[currentSlide].title}</h2>
               </div>
-
-              <div className="flex items-start space-x-6 bg-white/5 p-6 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-lg">
-                <div className="bg-[#536DFE]/20 p-4 rounded-xl">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#82B1FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-white mb-2">Anonymised Data</h3>
-                  <p className="text-[#E8EAF6]">Employers only see overall company wellbeing metrics</p>
-                </div>
-              </div>
+              <p className="text-xl opacity-90">{slides[currentSlide].description}</p>
             </div>
-          </div>
-        </div>
 
-        <div className="order-1 lg:order-2 animate-fade-in">
-          <div className="backdrop-blur-md bg-white/10 p-8 rounded-2xl border border-white/20 shadow-2xl">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Welcome to Ekaant</h2>
-            <div className="flex justify-between space-x-4">
-              <Link 
-                to="/sign-in"
-                className="flex-1 py-3 px-6 rounded-xl bg-gradient-to-r from-[#7C4DFF] to-[#536DFE] text-white font-medium hover:from-[#6200EA] hover:to-[#304FFE] transition-all duration-300 text-center shadow-lg hover:shadow-xl"
-              >
-                Sign In
-              </Link>
-              <Link 
-                to="/sign-up"
-                className="flex-1 py-3 px-6 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-all duration-300 text-center border border-white/20 hover:border-white/30 shadow-lg hover:shadow-xl"
-              >
-                Sign Up
-              </Link>
+            <div className="flex justify-center space-x-2 mt-12">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    currentSlide === index ? "bg-white w-8" : "bg-white/50"
+                  }`}
+                  onClick={() => setCurrentSlide(index)}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      <footer className="absolute bottom-8 left-0 right-0 text-center">
-        <p className="text-[#C5CAE9]">© {new Date().getFullYear()} Ekaant. All rights reserved.</p>
-      </footer>
+      {/* Right Section - Sign In Form */}
+      <div className="w-1/2 p-12 flex flex-col justify-center items-center">
+        <div className="w-full max-w-md">
+          <div className="flex items-center justify-between mb-8">
+            <img src="/SimpleFlow-logo.png" alt="SimpleFlow" className="h-8" />
+          </div>
+
+          <div className="flex mb-8">
+            <button 
+              onClick={() => navigate('/sign-up')}
+              className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-l hover:bg-blue-700 transition-all"
+            >
+              Sign Up
+            </button>
+            <button 
+              onClick={() => navigate('/sign-in')}
+              className="flex-1 py-2 px-4 bg-gray-100 text-gray-600 rounded-r hover:bg-gray-200 transition-all"
+            >
+              Sign In
+            </button>
+          </div>
+
+         
+          
+        </div>
+      </div>
     </div>
   );
 };
