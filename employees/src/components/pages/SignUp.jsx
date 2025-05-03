@@ -653,12 +653,7 @@ const Signup = () => {
     try {
       const res = await axios.post("https://ekaant.onrender.com/api/set-password", {
         email: formData.email,
-        password: formData.password,
-        username: formData.username,
-        employeeId: formData.employeeId,
-        role: formData.role,
-        phoneNumber: formData.phoneNumber,
-        department: formData.department
+        password: formData.password
       });
 
       // Check message in response since backend returns success in message
