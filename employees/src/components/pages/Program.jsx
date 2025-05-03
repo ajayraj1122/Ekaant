@@ -1239,7 +1239,6 @@ const Program = () => {
             >
                <Tab label="Live Sessions" />
               <Tab label="Recorded Sessions" />
-              {/* <Tab label="Live Sessions" /> */}
             </Tabs>
           </Paper>
           {activeTab === 0 ? <LiveSession /> : renderPrograms(false)}
