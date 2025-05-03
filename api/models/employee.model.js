@@ -22,9 +22,7 @@ const employeeSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    unique: true,
-    sparse: true
-  
+
   },
   role: {
     type: String,
@@ -32,8 +30,7 @@ const employeeSchema = new mongoose.Schema({
   },
   employeeId: {
     type: String,
-    unique: true,
-    sparse: true
+  
   },
   department: {
     type: String,
