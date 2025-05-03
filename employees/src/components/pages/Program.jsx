@@ -691,6 +691,7 @@
 // export default Program;
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 import {
   Typography,
   Button,
@@ -703,7 +704,6 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import { useCredits } from "../context/CreditsContext";
 import LiveSession from "../pages/LiveSession";
 import CloseIcon from '@mui/icons-material/Close';
@@ -1075,7 +1075,8 @@ const Program = () => {
               doctorName: selectedProgram.expert.name,
               doctorSpecialty: selectedProgram.expert.description,
               sessionDate: new Date(),
-              type: 'expert'
+              type: 'expert',
+              bookingTime: new Date()
             };
 
             const notificationResponse = await axios.post(
@@ -1090,7 +1091,12 @@ const Program = () => {
             );
 
             if (notificationResponse.data.success) {
-              window.dispatchEvent(new Event('notificationCreated'));
+              // Create and dispatch custom notification event with notification data
+              const notificationEvent = new CustomEvent('notificationCreated', {
+                detail: notificationResponse.data.notification
+              });
+              window.dispatchEvent(notificationEvent);
+              window.dispatchEvent(new Event('chartDataUpdated'));
             }
           } catch (error) {
             console.error("Error creating notification:", error);
