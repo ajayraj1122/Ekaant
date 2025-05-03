@@ -351,7 +351,7 @@ const Program = () => {
 
           const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
 
-          // Create activity log instead of using localStorage
+
           try {
             await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',

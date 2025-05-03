@@ -2,6 +2,8 @@
 // import { useState,useEffect } from "react";
 // import { useNavigate, Link } from "react-router-dom";
 // import axios from "axios";
+// import PhoneInput from 'react-phone-input-2';
+// import 'react-phone-input-2/lib/style.css';
 
 
 // const waveAnimationStyles = {
@@ -41,6 +43,8 @@
 //     otp: "",
 //     password: "",
 //     confirmPassword: "",
+//     showPassword: false,
+//     showConfirmPassword: false,
 //   });
 //   const [error, setError] = useState("");
 //   const [loading, setLoading] = useState(false);
@@ -255,25 +259,49 @@
 //           {step === 1 && (
 //             <form onSubmit={handleSendOTP} className="space-y-4">
 //               <div>
-//                 <label className="block text-sm font-medium text-gray-700 mb-2">FullName</label>
+//                 <div className="flex items-center mb-2">
+//                   <label className="block text-sm font-medium text-gray-700">First & Last Name</label>
+//                   <div className="relative ml-2 group">
+//                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+//                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+//                     </svg>
+//                     <div className="invisible group-hover:visible absolute z-10 w-48 p-2 mt-1 text-sm bg-gray-800 text-white rounded-lg">
+//                       Please enter your full name (First Name & Last Name)
+//                     </div>
+//                   </div>
+//                 </div>
 //                 <input
-//                   type="text"
+//                   type="username"
 //                   name="username"
-//                   placeholder="Enter FullName"
+//                   placeholder="John Smith"
 //                   onChange={handleChange}
 //                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
 //                   required
+//                   pattern="^[A-Za-z]+ [A-Za-z]+$"
+//                   title="Please enter both your first and last name"
 //                 />
 //               </div>
 //               <div>
-//                 <label className="block text-sm font-medium text-gray-700 mb-2">Campany Email</label>
+//                 <div className="flex items-center mb-2">
+//                   <label className="block text-sm font-medium text-gray-700">Company Email</label>
+//                   <div className="relative ml-2 group">
+//                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+//                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+//                     </svg>
+//                     <div className="invisible group-hover:visible absolute z-10 w-48 p-2 mt-1 text-sm bg-gray-800 text-white rounded-lg">
+//                       Please use your official company email address only
+//                     </div>
+//                   </div>
+//                 </div>
 //                 <input
 //                   type="email"
 //                   name="email"
-//                   placeholder="name@example.com"
+//                   placeholder="john@company.com"
 //                   onChange={handleChange}
 //                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
 //                   required
+//                   pattern="^[a-zA-Z0-9._%+-]+@(?!gmail\.com)(?!yahoo\.com)(?!hotmail\.com)(?!.*\.com$)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+//                   title="Please use your company email address"
 //                 />
 //               </div>
 //               <div>
@@ -311,15 +339,42 @@
 //               </div>
 //               <div>
 //                 <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-//                 <input
-//                   type="text"
-//                   name="phoneNumber"
-//                   placeholder="Enter Phone Number"
-//                   onChange={handleChange}
-//                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-//                   required
-//                   pattern="[0-9]{10}"
-//                 />
+//                 <div className="relative">
+//                   <PhoneInput
+//                     country={'in'}
+//                     value={formData.phoneNumber}
+//                     onChange={phone => setFormData(prev => ({...prev, phoneNumber: phone}))}
+//                     containerClass="w-full"
+//                     enableSearch={true}
+//                     disableSearchIcon={true}
+//                     inputStyle={{
+//                       width: '100%',
+//                       height: '48px',
+//                       padding: '0.75rem 0.75rem 0.75rem 3.5rem',
+//                       borderRadius: '0.5rem',
+//                       border: '1px solid #e5e7eb',
+//                       backgroundColor: '#f9fafb',
+//                       outline: 'none'
+//                     }}
+//                     buttonStyle={{
+//                       border: 'none',
+//                       backgroundColor: 'transparent',
+//                       padding: '0.75rem',
+//                       borderRight: '1px solid #e5e7eb'
+//                     }}
+//                     dropdownStyle={{
+//                       width: '300px'
+//                     }}
+//                     searchStyle={{
+//                       width: '100%',
+//                       padding: '0.5rem'
+//                     }}
+//                     inputProps={{
+//                       required: true,
+//                       className: 'w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50'
+//                     }}
+//                   />
+//                 </div>
 //               </div>
              
 //               <button
@@ -359,25 +414,65 @@
 //             <form onSubmit={handleSetPassword} className="space-y-4">
 //               <div>
 //                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-//                 <input
-//                   type="password"
-//                   name="password"
-//                   placeholder="••••••••"
-//                   onChange={handleChange}
-//                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-//                   required
-//                 />
+//                 <div className="relative">
+//                   <input
+//                     type={formData.showPassword ? "text" : "password"}
+//                     name="password"
+//                     placeholder="••••••••"
+//                     onChange={handleChange}
+//                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+//                     required
+//                     pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+//                     title="Must contain at least 8 characters, one letter, one number and one special character"
+//                   />
+//                   <button
+//                     type="button"
+//                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+//                     onClick={() => setFormData(prev => ({ ...prev, showPassword: !prev.showPassword }))}
+//                   >
+//                     {formData.showPassword ? (
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                         <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+//                         <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+//                       </svg>
+//                     ) : (
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+//                         <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+//                       </svg>
+//                     )}
+//                   </button>
+//                 </div>
 //               </div>
 //               <div>
 //                 <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-//                 <input
-//                   type="password"
-//                   name="confirmPassword"
-//                   placeholder="••••••••"
-//                   onChange={handleChange}
-//                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-//                   required
-//                 />
+//                 <div className="relative">
+//                   <input
+//                     type={formData.showConfirmPassword ? "text" : "password"}
+//                     name="confirmPassword"
+//                     placeholder="••••••••"
+//                     onChange={handleChange}
+//                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+//                     required
+//                   />
+//                   <button
+//                     type="button"
+//                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+//                     onClick={() => setFormData(prev => ({ ...prev, showConfirmPassword: !prev.showConfirmPassword }))}
+//                   >
+//                     {formData.showConfirmPassword ? (
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                         <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+//                         <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+//                       </svg>
+//                     ) : (
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+//                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+//                         <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+//                       </svg>
+//                     )}
+//                   </button>
+//                 </div>
 //               </div>
 //               <button
 //                 type="submit"
@@ -444,6 +539,8 @@ const Signup = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     // Add keyframes to document
@@ -510,7 +607,8 @@ const Signup = () => {
     setLoading(true);
     try {
       await axios.post("https://ekaant.onrender.com/api/sign-up", formData);
-      alert("OTP sent to your email!");
+      setOtpSent(true);
+      setTimeout(() => setOtpSent(false), 3000);
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || "Error sending OTP!");
@@ -523,12 +621,21 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://ekaant.onrender.com/api/verify-otp", {
+      const response = await axios.post("https://ekaant.onrender.com/api/verify-otp", {
         email: formData.email,
         otp: formData.otp,
       });
-      alert("OTP verified successfully!");
-      setStep(3);
+
+      setOtpVerified(true);
+      const successDiv = document.createElement('div');
+      successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      successDiv.textContent = 'OTP verified successfully';
+      document.body.appendChild(successDiv);
+
+      setTimeout(() => {
+        successDiv.remove();
+        setStep(3);
+      }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP!");
     } finally {
@@ -547,14 +654,31 @@ const Signup = () => {
       const res = await axios.post("https://ekaant.onrender.com/api/set-password", {
         email: formData.email,
         password: formData.password,
-      }, { withCredentials: true });
+        username: formData.username,
+        employeeId: formData.employeeId,
+        role: formData.role,
+        phoneNumber: formData.phoneNumber,
+        department: formData.department
+      });
 
-      if (res.data.success) {
-        alert("Sign Up Successful!");
-        navigate("/sign-in");
+      // Check message in response since backend returns success in message
+      if (res.data.message === "Password set successfully!") {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+        successDiv.textContent = 'Password set successfully';
+        document.body.appendChild(successDiv);
+
+        setTimeout(() => {
+          successDiv.remove();
+          navigate("/sign-in");
+        }, 2000);
+      } else {
+        throw new Error(res.data.message || "Failed to set password");
       }
-    } catch {
-      setError("Sign up failed!");
+    } catch (err) {
+      console.error("Password setting error:", err);
+      setError(err.response?.data?.message || err.message || "Failed to set password!");
+    } finally {
       setLoading(false);
     }
   };
@@ -647,7 +771,7 @@ const Signup = () => {
             >
               Sign In
             </button>
-            
+
           </div>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -667,7 +791,7 @@ const Signup = () => {
                   </div>
                 </div>
                 <input
-                  type="username"
+                  type="text"
                   name="username"
                   placeholder="John Smith"
                   onChange={handleChange}
@@ -772,7 +896,7 @@ const Signup = () => {
                   />
                 </div>
               </div>
-             
+
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
@@ -784,26 +908,36 @@ const Signup = () => {
           )}
 
           {step === 2 && (
-            <form onSubmit={handleVerifyOTP} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
-                <input
-                  type="text"
-                  name="otp"
-                  placeholder="Enter OTP"
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                  required
-                />
+            <>
+              {otpSent && (
+                <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500 transform translate-y-0">
+                  OTP sent to your email
+                </div>
+              )}
+              <div className="flex flex-col items-center justify-center space-y-6">
+                <h2 className="text-2xl font-bold text-gray-800">Verify Your Email</h2>
+                <p className="text-gray-600">Please enter the OTP sent to your email</p>
+                <form onSubmit={handleVerifyOTP} className="w-full max-w-sm space-y-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="otp"
+                      placeholder="Enter OTP"
+                      onChange={handleChange}
+                      className="w-full p-4 text-center text-lg border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
+                    disabled={loading}
+                  >
+                    {loading ? "Verifying..." : "Verify OTP"}
+                  </button>
+                </form>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
-                disabled={loading}
-              >
-                {loading ? "Verifying..." : "Verify OTP"}
-              </button>
-            </form>
+            </>
           )}
 
           {step === 3 && (
