@@ -349,54 +349,26 @@ const Program = () => {
           // Fetch updated program progress after joining
           await fetchEmployeePrograms();
 
-          // const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
-
-          // // Create activity log instead of using localStorage
-          // try {
-          //   await fetch('https://ekaant.onrender.com/api/activity-log', {
-          //     method: 'POST',
-          //     headers: {
-          //       'Content-Type': 'application/json',
-          //       'Authorization': `Bearer ${localStorage.getItem('token')}`
-          //     },
-          //     body: JSON.stringify({
-          //       type: 'program',
-          //       month: currentMonth,
-          //       value: 5
-          //     })
-          //   });
-          // } catch (error) {
-          //   console.error('Failed to  update bar chart data ', error);
-          // }
-
           const currentMonth = new Date().toLocaleString('en-US', { month: 'short' });
+
+          // Create activity log instead of using localStorage
           try {
-            const token = localStorage.getItem("token");
-            if (!token) {
-              throw new Error('No authentication token found');
-            }
-  
-            const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
+            await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
               },
               body: JSON.stringify({
+                type: 'program',
                 month: currentMonth,
-                category: 'program'
+                value: 1
               })
             });
-  
-            if (!response.ok) {
-              throw new Error('Failed to update bar chart data');
-            }
-  
-            // Refresh chart data
-            window.dispatchEvent(new Event('chartDataUpdated'));
           } catch (error) {
-            console.error('❌ Failed to update bar chart:', error.message);
+            console.error('Failed to  update bar chart data ', error);
           }
+
           window.dispatchEvent(new Event('chartDataUpdated'));
 
           setConfirmJoin(false);
@@ -574,13 +546,14 @@ const Program = () => {
                 },
               }}
             >
+               <Tab label="Live Sessions" />
               <Tab label="Recorded Sessions" />
-              <Tab label="Live Sessions" />
+              {/* <Tab label="Live Sessions" /> */}
             </Tabs>
           </Paper>
-
-          {activeTab === 0 ? renderPrograms(true) : renderPrograms(false)}
-          {activeTab === 1 ? <LiveSession /> : renderPrograms(false)}
+          {activeTab === 0 ? <LiveSession /> : renderPrograms(false)}
+          {activeTab === 1 ? renderPrograms(true) : renderPrograms(false)}
+          {/* //{activeTab === 1 ? <LiveSession /> : renderPrograms(false)} */}
         </div>
       )}
 
