@@ -1,3 +1,4 @@
+
 // import { useState, useEffect } from "react";
 // import { motion, AnimatePresence } from "framer-motion";
 // import {
@@ -360,13 +361,13 @@
 //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
 //               },
 //               body: JSON.stringify({
-//                 type: 'program',
 //                 month: currentMonth,
+//                 category: 'Program',
 //                 value: 1
 //               })
 //             });
 //           } catch (error) {
-//             console.error('Failed to  update bar chart data ', error);
+//             console.error('Failed to update bar chart data ', error);
 //           }
 
 //           window.dispatchEvent(new Event('chartDataUpdated'));
@@ -384,8 +385,12 @@
 //   };
 
 //   const handleExpertClick = (program) => {
-//     setSelectedExpertProgram(program);
-//     setExpertPopup(true);
+//     if (!attendEnabled[program.id]) {
+//       setSelectedExpertProgram(program);
+//       setExpertPopup(true);
+//     } else {
+//       window.location.href = `/${program.name.toLowerCase().replace(/\s+/g, '-')}`;
+//     }
 //   };
 
 //   const handleCheckboxChange = (programId) => (event) => {
@@ -548,7 +553,6 @@
 //             >
 //                <Tab label="Live Sessions" />
 //               <Tab label="Recorded Sessions" />
-//               {/* <Tab label="Live Sessions" /> */}
 //             </Tabs>
 //           </Paper>
 //           {activeTab === 0 ? <LiveSession /> : renderPrograms(false)}
@@ -699,6 +703,7 @@ import {
   Paper,
   Box,
 } from "@mui/material";
+import axios from "axios";
 import { useCredits } from "../context/CreditsContext";
 import LiveSession from "../pages/LiveSession";
 import CloseIcon from '@mui/icons-material/Close';
@@ -1058,6 +1063,39 @@ const Program = () => {
 
           window.dispatchEvent(new Event('chartDataUpdated'));
 
+          // Create notification
+          try {
+            const token = localStorage.getItem("token");
+            const notificationData = {
+              title: "Program Joined",
+              date: new Date().toISOString().split('T')[0],
+              time: selectedProgram.expert.sessionTime,
+              duration: "Program Access",
+              price: `${selectedProgram.credits} credits`,
+              doctorName: selectedProgram.expert.name,
+              doctorSpecialty: selectedProgram.expert.description,
+              sessionDate: new Date(),
+              type: 'expert'
+            };
+
+            const notificationResponse = await axios.post(
+              "https://ekaant.onrender.com/api/notifications",
+              notificationData,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              }
+            );
+
+            if (notificationResponse.data.success) {
+              window.dispatchEvent(new Event('notificationCreated'));
+            }
+          } catch (error) {
+            console.error("Error creating notification:", error);
+          }
+
           setConfirmJoin(false);
           setExpertPopup(false);
         } catch (error) {
@@ -1239,6 +1277,7 @@ const Program = () => {
             >
                <Tab label="Live Sessions" />
               <Tab label="Recorded Sessions" />
+              {/* <Tab label="Live Sessions" /> */}
             </Tabs>
           </Paper>
           {activeTab === 0 ? <LiveSession /> : renderPrograms(false)}
