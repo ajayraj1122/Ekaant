@@ -1361,7 +1361,7 @@ const [showAllSessions, setShowAllSessions] = useState(false);
         }
 
         setIsLoading(true);
-        const response = await axios.get("http://localhost:3000/api/employee/profile", {
+        const response = await axios.get("https://ekaant.onrender.com/api/employee/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1398,7 +1398,7 @@ const [showAllSessions, setShowAllSessions] = useState(false);
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:3000/api/expert-session/employee/${employeeEmail}`,
+          `https://ekaant.onrender.com/api/expert-session/employee/${employeeEmail}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -1435,7 +1435,7 @@ const SESSION_COST = 100;
 
         // Check if slot is already booked
         const checkResponse = await axios.get(
-            `http://localhost:3000/api/expert-session/check-availability/${selectedExpert.email}/${selectedDate}/${selectedStartTime}`,
+            `https://ekaant.onrender.com/api/expert-session/check-availability/${selectedExpert.email}/${selectedDate}/${selectedStartTime}`,
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -1518,7 +1518,7 @@ const SESSION_COST = 100;
 
         const token = localStorage.getItem("token");
         const response = await axios.post(
-            "http://localhost:3000/api/expert-session/book",
+            "https://ekaant.onrender.com/api/expert-session/book",
             requestBody,
             { 
               headers: { 
@@ -1554,7 +1554,7 @@ const SESSION_COST = 100;
 
         try {
             await axios.post(
-                "http://localhost:3000/api/notifications",
+                "https://ekaant.onrender.com/api/notifications",
                 notificationData,
                 {
                     headers: {
@@ -1575,7 +1575,7 @@ const SESSION_COST = 100;
             throw new Error('No authentication token found');
           }
 
-          const response = await fetch('http://localhost:3000/api/barchart/update', {
+          const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1606,7 +1606,7 @@ const SESSION_COST = 100;
         // Update MongoDB LineChart
         try {
           const token = localStorage.getItem("token");
-          await fetch('http://localhost:3000/api/linechart/update', {
+          await fetch('https://ekaant.onrender.com/api/linechart/update', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1660,7 +1660,7 @@ const SESSION_COST = 100;
       }
 
       const response = await axios.post(
-        `http://localhost:3000/api/expert-session/cancel/${employeeEmail}`,
+        `https://ekaant.onrender.com/api/expert-session/cancel/${employeeEmail}`,
         { 
           expertEmail,
           sessionDate,
@@ -1694,7 +1694,7 @@ const SESSION_COST = 100;
               throw new Error('No authentication token found');
             }
 
-            const response = await fetch('http://localhost:3000/api/barchart/update', {
+            const response = await fetch('https://ekaant.onrender.com/api/barchart/update', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1732,7 +1732,7 @@ const SESSION_COST = 100;
             // Update MongoDB LineChart
             try {
               const token = localStorage.getItem("token");
-              await fetch('http://localhost:3000/api/linechart/update', {
+              await fetch('https://ekaant.onrender.com/api/linechart/update', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -1765,7 +1765,7 @@ const SESSION_COST = 100;
             };
 
             await axios.post(
-              "http://localhost:3000/api/notifications",
+              "https://ekaant.onrender.com/api/notifications",
               notificationData,
               {
                 headers: {
@@ -1929,8 +1929,7 @@ const SESSION_COST = 100;
                                   alt={expert?.name} 
                                   className="w-12 h-12 rounded-full objectcover border-2 border-indigo-100"
                                 />
-                                <div>
-                                  <h4 className="font-semibold text-gray-900">{expert?.name}</h4>
+                                <div>                                  <h4 className="font-semibold text-gray-900">{expert?.name}</h4>
                                   <p className="text-sm text-gray-600">{expert?.specialization}</p>
                                 </div>
                               </div>
@@ -2074,8 +2073,8 @@ const SESSION_COST = 100;
                     )}
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-2">{expert.overview}</p>
-                  <button className="w-full mt-4 bg-indigo-50 text-indigo-700 font-medium py-2 rounded-lg hover:bg-indigo-100 transition-colors">
-                    View Profile
+                  <button className="w-full mt-4 bg-indigo-500 text-indigo-900 font-medium py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                    Book Session
                   </button>
                 </div>
               </div>
@@ -2261,25 +2260,6 @@ const SESSION_COST = 100;
     </div>
   )}
 </div>
-
-                    <div className="mt-4">
-                      <DatePicker 
-                        selected={selectedDate ? new Date(selectedDate) : null} 
-                        onChange={(date) => {
-                          const adjustedDate = new Date(date);
-                          setSelectedDate(adjustedDate.toISOString().split("T")[0]);
-                        }}
-                        includeDates={selectedExpert.availability
-                          .filter(date => new Date(date.date) >= new Date().setHours(0,0,0,0))
-                          .map(date => new Date(date.date))
-                        } 
-                        minDate={new Date()}
-                        dateFormat="MMMM d, yyyy" 
-                        className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" 
-                        placeholderText="Click to select a date"
-                        calendarClassName="shadow-lg border-none"
-                      />
-                    </div>
                   </div>
                 </div>
 
