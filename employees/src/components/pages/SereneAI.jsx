@@ -1,4 +1,9 @@
-import React from "react";
+import React from 'react'
+
 export default function SereneAI() {
-  return <h2>Serene AI Page</h2>;
+  return (
+    <div>SereneAI
+      <h1 className="text-5xl font-bold">Serene AI chat will be coming soon!...</h1>
+    </div>
+  )
 }
