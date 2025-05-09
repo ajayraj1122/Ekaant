@@ -1141,8 +1141,8 @@ const experts = [
     image: "https://thumbs.dreamstime.com/b/happy-doctor-face-8645837.jpg", 
     name: "Dr. Kuldeep Singh", 
     specialization: "Anxiety", 
-    rating: 4.5,
-    levels: 10,
+    rating: 4.8,
+    levels: 8,
     overview: "Dr. Kuldeep Singh has completed a 2-year specialization in Anxiety Disorders from AIIMS and currently works as a psychiatrist at AIIMS, New Delhi.",
     email: "mansi.91289@gmail.com",
     availability: [
@@ -2074,7 +2074,7 @@ const SESSION_COST = 100;
                   </div>
                   <p className="text-gray-100 text-sm line-clamp-2">{expert.overview}</p>
                   <button className="w-full mt-4 bg-indigo-500 text-indigo-100 font-medium py-2 rounded-lg hover:bg-indigo-600 transition-colors">
-                    Book Session
+                    Book Sessi
                   </button>
                 </div>
               </div>
