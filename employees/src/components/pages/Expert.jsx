@@ -2072,8 +2072,8 @@ const SESSION_COST = 100;
                       </div>
                     )}
                   </div>
-                  <p className="text-gray-600 text-sm line-clamp-2">{expert.overview}</p>
-                  <button className="w-full mt-4 bg-indigo-500 text-indigo-900 font-medium py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                  <p className="text-gray-100 text-sm line-clamp-2">{expert.overview}</p>
+                  <button className="w-full mt-4 bg-indigo-500 text-indigo-100 font-medium py-2 rounded-lg hover:bg-indigo-600 transition-colors">
                     Book Session
                   </button>
                 </div>
