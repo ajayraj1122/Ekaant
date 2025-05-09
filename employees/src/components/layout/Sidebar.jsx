@@ -112,12 +112,21 @@ const Sidebar = () => {
         }
 
         .menu-item {
-          backdrop-filter: blur(4px);
           transition: all 0.3s ease;
+          position: relative;
         }
 
-        .menu-item:hover {
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        .menu-item:hover::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 100%;
+          height: 80%;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          z-index: -1;
         }
       `}</style>
 
@@ -146,10 +155,10 @@ const Sidebar = () => {
               key={item.name}
               to={item.link}
               onClick={() => setActive(item.name)}
-              className={`menu-item flex items-center p-3 rounded-lg cursor-pointer mb-2 transition-all duration-300 ${
+              className={`menu-item flex items-center p-3 cursor-pointer mb-2 transition-all duration-300 ${
                 active === item.name 
-                  ? "bg-white/20 text-white transform scale-105" 
-                  : "hover:bg-white/10 hover:text-white hover:scale-105"
+                  ? "text-white transform scale-105" 
+                  : "hover:text-white hover:scale-105 opacity-70"
               }`}
             >
               {item.icon}
