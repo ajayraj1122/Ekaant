@@ -8,7 +8,7 @@ import { createTeamsMeeting } from "../utils/teamsMeeting.js";  // ✅ Import th
 import sendEmailNotification from "../utils/sendEmailNotification.js";
 import Session from "../models/Session.model.js";
 
-
+//new comment
 dotenv.config();
 
 // Configure Nodemailer with retries
