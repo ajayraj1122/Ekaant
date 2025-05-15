@@ -742,7 +742,6 @@ export const signup = async (req, res) => {
         html: `
           <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: linear-gradient(to bottom right, #ffffff, #f5f7ff);">
             <div style="text-align: center; margin-bottom: 20px;">
-              <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="EKAANT" style="height: 60px;">
             </div>
             <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
               <h1 style="color: #2b3481; margin-bottom: 20px; text-align: center;">Welcome to EKAANT!</h1>
@@ -836,7 +835,6 @@ export const setPassword = async (req, res) => {
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: linear-gradient(to bottom right, #ffffff, #f5f7ff);">
           <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="Ekaant" style="height: 60px;">
           </div>
           <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <h1 style="color: #2b3481; margin-bottom: 20px; text-align: center;">Welcome to Your Journey!</h1>

@@ -436,13 +436,13 @@ export const bookExpertSession = async (req, res) => {
         message: "Failed to save session"
       });
     }
-
+// <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="EKAANT" style="height: 60px;">
     // Send confirmation emails
     const employeeSubject = "📅 Your One-on-One Expert Session is Confirmed | Ekaant Wellness";
     const employeeMessage = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; margin-bottom: 20px;">
-        <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="EKAANT" style="height: 60px;">
+        
         </div>
 
         <h2 style="color: #2C3E50; border-bottom: 2px solid #3498DB; padding-bottom: 10px;">Your Expert Session is Confirmed!</h2>
