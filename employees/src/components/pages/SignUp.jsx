@@ -48,6 +48,8 @@
 //   });
 //   const [error, setError] = useState("");
 //   const [loading, setLoading] = useState(false);
+//   const [otpSent, setOtpSent] = useState(false);
+//   const [otpVerified, setOtpVerified] = useState(false);
 //   const navigate = useNavigate();
 //   useEffect(() => {
 //     // Add keyframes to document
@@ -114,7 +116,8 @@
 //     setLoading(true);
 //     try {
 //       await axios.post("https://ekaant.onrender.com/api/sign-up", formData);
-//       alert("OTP sent to your email!");
+//       setOtpSent(true);
+//       setTimeout(() => setOtpSent(false), 3000);
 //       setStep(2);
 //     } catch (err) {
 //       setError(err.response?.data?.message || "Error sending OTP!");
@@ -127,12 +130,21 @@
 //     e.preventDefault();
 //     setLoading(true);
 //     try {
-//       await axios.post("https://ekaant.onrender.com/api/verify-otp", {
+//       const response = await axios.post("https://ekaant.onrender.com/api/verify-otp", {
 //         email: formData.email,
 //         otp: formData.otp,
 //       });
-//       alert("OTP verified successfully!");
-//       setStep(3);
+
+//       setOtpVerified(true);
+//       const successDiv = document.createElement('div');
+//       successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+//       successDiv.textContent = 'OTP verified successfully';
+//       document.body.appendChild(successDiv);
+
+//       setTimeout(() => {
+//         successDiv.remove();
+//         setStep(3);
+//       }, 2000);
 //     } catch (err) {
 //       setError(err.response?.data?.message || "Invalid OTP!");
 //     } finally {
@@ -150,15 +162,27 @@
 //     try {
 //       const res = await axios.post("https://ekaant.onrender.com/api/set-password", {
 //         email: formData.email,
-//         password: formData.password,
-//       }, { withCredentials: true });
+//         password: formData.password
+//       });
 
-//       if (res.data.success) {
-//         alert("Sign Up Successful!");
-//         navigate("/sign-in");
+//       // Check message in response since backend returns success in message
+//       if (res.data.message === "Password set successfully!") {
+//         const successDiv = document.createElement('div');
+//         successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+//         successDiv.textContent = 'Password set successfully';
+//         document.body.appendChild(successDiv);
+
+//         setTimeout(() => {
+//           successDiv.remove();
+//           navigate("/sign-in");
+//         }, 2000);
+//       } else {
+//         throw new Error(res.data.message || "Failed to set password");
 //       }
-//     } catch {
-//       setError("Sign up failed!");
+//     } catch (err) {
+//       console.error("Password setting error:", err);
+//       setError(err.response?.data?.message || err.message || "Failed to set password!");
+//     } finally {
 //       setLoading(false);
 //     }
 //   };
@@ -251,7 +275,7 @@
 //             >
 //               Sign In
 //             </button>
-            
+
 //           </div>
 
 //           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -271,7 +295,7 @@
 //                   </div>
 //                 </div>
 //                 <input
-//                   type="username"
+//                   type="text"
 //                   name="username"
 //                   placeholder="John Smith"
 //                   onChange={handleChange}
@@ -376,7 +400,7 @@
 //                   />
 //                 </div>
 //               </div>
-             
+
 //               <button
 //                 type="submit"
 //                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
@@ -388,26 +412,36 @@
 //           )}
 
 //           {step === 2 && (
-//             <form onSubmit={handleVerifyOTP} className="space-y-4">
-//               <div>
-//                 <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
-//                 <input
-//                   type="text"
-//                   name="otp"
-//                   placeholder="Enter OTP"
-//                   onChange={handleChange}
-//                   className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-//                   required
-//                 />
+//             <>
+//               {otpSent && (
+//                 <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500 transform translate-y-0">
+//                   OTP sent to your email
+//                 </div>
+//               )}
+//               <div className="flex flex-col items-center justify-center space-y-6">
+//                 <h2 className="text-2xl font-bold text-gray-800">Verify Your Email</h2>
+//                 <p className="text-gray-600">Please enter the OTP sent to your email</p>
+//                 <form onSubmit={handleVerifyOTP} className="w-full max-w-sm space-y-4">
+//                   <div className="relative">
+//                     <input
+//                       type="text"
+//                       name="otp"
+//                       placeholder="Enter OTP"
+//                       onChange={handleChange}
+//                       className="w-full p-4 text-center text-lg border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
+//                       required
+//                     />
+//                   </div>
+//                   <button
+//                     type="submit"
+//                     className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
+//                     disabled={loading}
+//                   >
+//                     {loading ? "Verifying..." : "Verify OTP"}
+//                   </button>
+//                 </form>
 //               </div>
-//               <button
-//                 type="submit"
-//                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
-//                 disabled={loading}
-//               >
-//                 {loading ? "Verifying..." : "Verify OTP"}
-//               </button>
-//             </form>
+//             </>
 //           )}
 
 //           {step === 3 && (
@@ -832,25 +866,68 @@ const Signup = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                <input
-                  type="text"
-                  name="department"
-                  placeholder="Enter Department"
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                  required
-                />
+                <div className="relative w-full">
+                  <input
+                    list="departments"
+                    name="department"
+                    placeholder="Select or type your department"
+                    value={formData.department}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                    required
+                  />
+                  <datalist id="departments" className="w-full">
+                    <option value="Engineering" />
+                    <option value="Information Technology" />
+                    <option value="Product" />
+                    <option value="Design" />
+                    <option value="Marketing" />
+                    <option value="Sales" />
+                    <option value="Human Resources" />
+                    <option value="Finance" />
+                    <option value="Operations" />
+                    <option value="Customer Support" />
+                    <option value="Research and Development" />
+                    <option value="Legal" />
+                    <option value="Business Development" />
+                    <option value="Quality Assurance" />
+                  </datalist>
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2"> Current Role</label>
-                <input
-                  type="text"
-                  name="role"
-                  placeholder="Enter Role"
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-                  required
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-2">Current Role</label>
+                <div className="relative w-full">
+                  <input
+                    list="roles"
+                    name="role"
+                    placeholder="Select or type your role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                    required
+                  />
+                  <datalist id="roles" className="w-full">
+                    <option value="Software Engineer" />
+                    <option value="Full Stack Developer" />
+                    <option value="Frontend Developer" />
+                    <option value="Backend Developer" />
+                    <option value="DevOps Engineer" />
+                    <option value="Data Scientist" />
+                    <option value="Product Manager" />
+                    <option value="UI/UX Designer" />
+                    <option value="Project Manager" />
+                    <option value="Business Analyst" />
+                    <option value="Marketing Manager" />
+                    <option value="Sales Executive" />
+                    <option value="HR Manager" />
+                    <option value="Financial Analyst" />
+                    <option value="Operations Manager" />
+                    <option value="Quality Analyst" />
+                    <option value="Technical Lead" />
+                    <option value="System Administrator" />
+                    <option value="Content Writer" />
+                  </datalist>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
