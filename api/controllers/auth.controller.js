@@ -740,17 +740,37 @@ export const signup = async (req, res) => {
         to: email,
         subject: "Welcome to EKAANT - Verify Your Email",
         html: `
-          <p>Hi ${username},</p>
-          <p>Thank you for signing up with EKAANT – we're excited to have you onboard!</p>
-          <p>To complete your login and access your dashboard, please use the following <strong>One-Time Password (OTP):</strong></p>
-          <p style="font-size: 24px; font-weight: bold;">🔐 Your OTP: ${otp}</p>
-          <p>This OTP is valid for the next 10 minutes. Please do not share it with anyone for security reasons.</p>
-          <p>If you didn't sign up or received this by mistake, please ignore this email.</p>
-          <p>Need help? Feel free to reach out at support@ekaant.co.</p>
-          <p>Let's build a healthier, more engaged workplace – together. 💙</p>
-          <hr>
-          <p>Team EKAANT<br>
-          <a href="http://www.ekaant.co">www.ekaant.co</a></p>
+          <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: linear-gradient(to bottom right, #ffffff, #f5f7ff);">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="EKAANT" style="height: 60px;">
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+              <h1 style="color: #2b3481; margin-bottom: 20px; text-align: center;">Welcome to EKAANT!</h1>
+              <p style="color: #444; font-size: 16px;">Hi ${username},</p>
+              <p style="color: #444; font-size: 16px;">Thank you for signing up with EKAANT – we're excited to have you onboard! 🎉</p>
+              <div style="background: #f8faff; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center;">
+                <p style="color: #2b3481; font-size: 18px; margin-bottom: 15px;">Your One-Time Password (OTP):</p>
+                <div style="font-size: 32px; font-weight: bold; color: #2b3481; letter-spacing: 5px; margin: 10px 0;">
+                  ${otp}
+                </div>
+                <p style="color: #666; font-size: 14px; margin-top: 15px;">Valid for 10 minutes only</p>
+              </div>
+              <div style="border-left: 4px solid #ffd700; padding-left: 15px; margin: 20px 0;">
+                <p style="color: #666; font-size: 14px; margin: 5px 0;">🔒 For security reasons, please do not share this OTP with anyone.</p>
+                <p style="color: #666; font-size: 14px; margin: 5px 0;">⏰ This code will expire in 10 minutes.</p>
+              </div>
+              <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #444; font-size: 16px;">Need assistance? We're here to help!</p>
+                <a href="mailto:support@ekaant.co" style="color: #2b3481; text-decoration: none; font-weight: bold;">support@ekaant.co</a>
+              </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px; padding: 20px; color: #666;">
+              <p style="margin: 5px 0;">Let's build a healthier, more engaged workplace – together. 💙</p>
+              <div style="margin-top: 15px;">
+                <a href="http://www.ekaant.co" style="color: #2b3481; text-decoration: none; font-weight: bold;">www.ekaant.co</a>
+              </div>
+            </div>
+          </div>
         `
       };
 
@@ -813,23 +833,49 @@ export const setPassword = async (req, res) => {
       to: email,
       subject: "A Warm Welcome from Ekaant 💙",
       html: `
-        <p>Hi ${employee.username.split(' ')[0]},</p>
-        <p>Welcome to EKAANT — I'm truly glad you're here.</p>
-        <p>I'm Himanshu, the founder at EKAANT, and I wanted to personally thank you for taking this first step toward your mental well-being.</p>
-        <p>Life gets busy. Stress builds up. And sometimes, it's hard to even find the right space to pause and reflect. That's why we created Ekaant — a place where you can talk freely, feel supported, and take care of your mental and emotional health on your terms.</p>
-        <p><strong>What you can access on EKAANT:</strong></p>
-        <ul>
-          <li>🧠 Confidential therapy & coaching</li>
-          <li>🌿 Personalized well-being journeys</li>
-          <li>🎙️ Expert-led live sessions & tools that actually help</li>
-        </ul>
-        <p>Everything here is designed to be simple, private, and stigma-free. No judgment, no labels — just a safe space for you to focus on you.</p>
-        <p>We're here for you, every step of the way.</p>
-        <p>If you ever have feedback, suggestions, or need support — feel free to write to me directly at himanshu@ekaant.co. I'd love to hear from you.</p>
-        <p>Take care, and welcome to Ekaant.</p>
-        <p>Best Regards<br>
-        Himanshu Sharma<br>
-        Founder & CEO - EKAANT</p>
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: linear-gradient(to bottom right, #ffffff, #f5f7ff);">
+          <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="Ekaant" style="height: 60px;">
+          </div>
+          <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h1 style="color: #2b3481; margin-bottom: 20px; text-align: center;">Welcome to Your Journey!</h1>
+            <p style="color: #444; font-size: 16px; line-height: 1.6;">Dear ${employee.username},</p>
+            <p style="color: #444; font-size: 16px; line-height: 1.6;">I'm Himanshu, the founder at EKAANT, and I wanted to personally thank you for taking this first step toward your mental well-being. 🌟</p>
+            <div style="background: #f8faff; padding: 20px; border-radius: 8px; margin: 25px 0;">
+              <p style="color: #444; font-size: 16px; line-height: 1.6;">Life gets busy. Stress builds up. And sometimes, it's hard to even find the right space to pause and reflect. That's why we created Ekaant — a place where you can talk freely, feel supported, and take care of your mental and emotional health on your terms.</p>
+            </div>
+            <div style="margin: 30px 0;">
+              <h2 style="color: #2b3481; font-size: 20px; margin-bottom: 15px;">Your EKAANT Journey Includes:</h2>
+              <div style="background: white; border-left: 4px solid #2b3481; padding: 15px; margin: 10px 0;">
+                <p style="color: #444; font-size: 16px; margin: 10px 0;">🧠 <strong>Confidential Therapy & Coaching</strong></p>
+                <p style="color: #666; font-size: 14px;">Professional support tailored to your needs</p>
+              </div>
+              <div style="background: white; border-left: 4px solid #4CAF50; padding: 15px; margin: 10px 0;">
+                <p style="color: #444; font-size: 16px; margin: 10px 0;">🌿 <strong>Personalized Well-being Journeys</strong></p>
+                <p style="color: #666; font-size: 14px;">Customized paths for your growth</p>
+              </div>
+              <div style="background: white; border-left: 4px solid #FFA726; padding: 15px; margin: 10px 0;">
+                <p style="color: #444; font-size: 16px; margin: 10px 0;">🎙️ <strong>Expert-led Live Sessions</strong></p>
+                <p style="color: #666; font-size: 14px;">Interactive tools that actually help</p>
+              </div>
+            </div>
+            <div style="background: #f8faff; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center;">
+              <p style="color: #444; font-size: 16px; line-height: 1.6;">Everything here is designed to be simple, private, and stigma-free. No judgment, no labels — just a safe space for you to focus on you.</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+              <p style="color: #444; font-size: 16px;">Have questions or feedback?</p>
+              <p style="color: #444; font-size: 16px;">Write to me directly at <a href="mailto:himanshu@ekaant.co" style="color: #2b3481; text-decoration: none; font-weight: bold;">himanshu@ekaant.co</a></p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 20px; padding: 20px; color: #666;">
+            <p style="margin: 5px 0;">Take care, and welcome to Ekaant.</p>
+            <p style="margin: 15px 0; color: #2b3481; font-weight: bold;">Himanshu Sharma</p>
+            <p style="margin: 5px 0; color: #666;">Founder & CEO - EKAANT</p>
+            <div style="margin-top: 15px;">
+              <a href="http://www.ekaant.co" style="color: #2b3481; text-decoration: none; font-weight: bold;">www.ekaant.co</a>
+            </div>
+          </div>
+        </div>
       `
     };
 
@@ -1326,8 +1372,7 @@ export const updateCredits = async (req, res) => {
       { 
         new: true,
         runValidators: true 
-      }
-    );
+      }    );
 
     if (!updatedEmployee) {
       return res.status(404).json({ success: false, message: "Employee not found" });

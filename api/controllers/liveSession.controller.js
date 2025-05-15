@@ -297,6 +297,7 @@ export const bookLiveSession = async (req, res) => {
     const employeeSubject = "🎉 Your Ekaant Session is Confirmed!";
     const employeeMessage = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <img src="https://ekaant.onrender.com/public/logo-ekaant.png" alt="EKAANT" style="height: 60px;">
         <h2 style="color: #2C3E50; border-bottom: 2px solid #E74C3C; padding-bottom: 10px;">Your Mental Wellness Session is Confirmed</h2>
 
         <p style="color: #34495E;">Dear Valued Member,</p>
