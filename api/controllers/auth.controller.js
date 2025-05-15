@@ -748,7 +748,7 @@ export const signup = async (req, res) => {
               <h1 style="color: #2b3481; margin-bottom: 20px; text-align: center;">Welcome to EKAANT!</h1>
               <p style="color: #444; font-size: 16px;">Hi ${username},</p>
               <p style="color: #444; font-size: 16px;">Thank you for signing up with EKAANT – we're excited to have you onboard! 🎉</p>
-              <p style="color: #444; font-size: 16px;">Thank you for signing up with EKAANT – we're excited to have you onboard! 🎉</p>
+             
               <div style="background: #f8faff; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center;">
                 <p style="color: #2b3481; font-size: 18px; margin-bottom: 15px;">Your One-Time Password (OTP):</p>
                 <div style="font-size: 32px; font-weight: bold; color: #2b3481; letter-spacing: 5px; margin: 10px 0;">
