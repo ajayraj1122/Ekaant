@@ -1175,13 +1175,6 @@ export const bookLive = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
 export const sendOtpForReset = async (req, res) => {
   try {
     console.log("🔹 Received Forgot Password request:", req.body);
